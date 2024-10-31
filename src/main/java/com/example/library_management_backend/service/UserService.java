@@ -1,6 +1,7 @@
 package com.example.library_management_backend.service;
 
 import com.example.library_management_backend.dto.user.request.UserCreationRequest;
+import com.example.library_management_backend.dto.user.request.UserGetAllRequest;
 import com.example.library_management_backend.dto.user.request.UserUpdateRequest;
 import com.example.library_management_backend.dto.user.response.UserResponse;
 import com.example.library_management_backend.entity.User;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +40,20 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    public List<UserResponse> getAllUsers() {
-        log.info("In method get Users");
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    public List<UserResponse> getAllUsers(UserGetAllRequest request) {
+        log.info("in getAllUsers function");
 
+        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
+        String email = (request.getEmail() == null || request.getEmail().isEmpty()) ? null : request.getEmail();
+
+        return userRepository.findAllByFilters(name, email)
+                .stream()
+                .map(userMapper::toUserResponse)
+                .skip(skipCount)
+                .limit(maxResultCount)
+                .collect(Collectors.toList());
     }
 
     public UserResponse updateUser(String userId, UserUpdateRequest request) {

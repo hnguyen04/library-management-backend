@@ -2,6 +2,7 @@ package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.dto.ApiResponse;
 import com.example.library_management_backend.dto.user.request.UserCreationRequest;
+import com.example.library_management_backend.dto.user.request.UserGetAllRequest;
 import com.example.library_management_backend.dto.user.request.UserUpdateRequest;
 import com.example.library_management_backend.dto.user.response.UserResponse;
 import com.example.library_management_backend.service.UserService;
@@ -29,9 +30,15 @@ public class UserController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<UserResponse>> getAllUser() {
+    ApiResponse<List<UserResponse>> getAllUser(
+            @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
+            @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount,
+            @ModelAttribute UserGetAllRequest request) {
+
+        request.setSkipCount(skipCount);
+        request.setMaxResultCount(maxResultCount);
         return ApiResponse.<List<UserResponse>>builder().
-                result(userService.getAllUsers()).
+                result(userService.getAllUsers(request)).
                 build();
     }
 
