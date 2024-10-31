@@ -3,6 +3,8 @@ package com.example.library_management_backend.dto.user.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,4 +14,6 @@ public class UserResponse {
     String id;
     String name;
     String email;
+    Date createdAt;
+    Date updatedAt;
 }
