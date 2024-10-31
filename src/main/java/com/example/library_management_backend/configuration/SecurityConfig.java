@@ -1,6 +1,5 @@
 package com.example.library_management_backend.configuration;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users/Create", "/auth/Login", "/auth/Introspect", "/auth/Logout", "/auth/refresh"
+            "/users/Create", "/auth/Login", "/auth/Introspect", "/auth/Logout", "/auth/refresh", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**"
     };
 
     @Value("${jwt.signerKey}")
@@ -34,15 +33,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(PUBLIC_ENDPOINTS)
                 .permitAll()
                 .anyRequest()
                 .authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
-                        .decoder(customJwtDecoder())
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter())
-        ));
+                .decoder(customJwtDecoder())
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+
+
+        );
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
