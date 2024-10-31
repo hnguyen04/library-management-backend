@@ -1,5 +1,8 @@
 package com.example.library_management_backend.dto.user.response;
 
+import com.example.library_management_backend.constants.Role;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,4 +19,6 @@ public class UserResponse {
     String email;
     Date createdAt;
     Date updatedAt;
+    @Enumerated(EnumType.STRING)
+    Role role;
 }

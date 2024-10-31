@@ -1,5 +1,6 @@
 package com.example.library_management_backend.entity;
 
+import com.example.library_management_backend.constants.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -32,8 +33,8 @@ public class User {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date UpdatedAt;
-
-    String Role;
+    @Enumerated(EnumType.STRING)
+    Role role;
 
     @PrePersist
     protected void onCreate() {
