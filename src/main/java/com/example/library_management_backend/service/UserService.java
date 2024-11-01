@@ -65,7 +65,9 @@ public class UserService {
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userMapper.updateUser(user, request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (request.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -91,6 +93,23 @@ public class UserService {
         User user = userRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         return userMapper.toUserResponse(user);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteManyUsers (List<String> ids) {
+        try {
+            List<User> users = userRepository.findAllById(ids);
+            if (users.size() != ids.size()) throw new AppException(ErrorCode.USER_NOT_EXISTED);
+
+            List<String> userIds = users.stream().map(User::getId).toList();
+            try {
+                userRepository.deleteAll(users);
+            } catch (Exception exception){
+                throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+            }
+        } catch (Exception exception) {
+            throw new AppException(ErrorCode.USER_NOT_EXISTED);
+        }
     }
 
 }

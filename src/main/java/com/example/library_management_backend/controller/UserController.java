@@ -33,10 +33,14 @@ public class UserController {
     ApiResponse<List<UserResponse>> getAllUser(
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount,
-            @ModelAttribute UserGetAllRequest request) {
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "email", required = false) String email) {
 
+        UserGetAllRequest request = new UserGetAllRequest();
         request.setSkipCount(skipCount);
         request.setMaxResultCount(maxResultCount);
+        request.setName(name);
+        request.setEmail(email);
         return ApiResponse.<List<UserResponse>>builder().
                 result(userService.getAllUsers(request)).
                 build();
@@ -57,7 +61,7 @@ public class UserController {
                 build();
     }
 
-    @PutMapping("/Update")
+    @PatchMapping("/Update")
     ApiResponse<UserResponse> updateUser(@RequestParam String id, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder().
                 result(userService.updateUser(id, request)).
@@ -68,6 +72,14 @@ public class UserController {
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder().
                 result(userService.getMyInfo()).
+                build();
+    }
+
+    @DeleteMapping("/DeleteMany")
+    ApiResponse<String> deleteManyUser(@RequestBody List<String> ids) {
+        userService.deleteManyUsers(ids);
+        return ApiResponse.<String>builder().
+                result("Users deleted successfully").
                 build();
     }
 }
