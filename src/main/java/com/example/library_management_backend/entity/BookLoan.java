@@ -1,5 +1,6 @@
 package com.example.library_management_backend.entity;
 
+import com.example.library_management_backend.constants.BookLoanStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -7,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -16,25 +16,34 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "book_loans")
+public class BookLoan {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    @Column(unique = true, nullable = false)
-    String name;
-    @Column(unique = true, nullable = false)
-    String email;
-    @Column(nullable = false)
-    String password;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    BookCopy bookCopy;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    User user;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    Date loanDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    Date returnDate;
+
+    @Enumerated(EnumType.STRING)
+    BookLoanStatusEnum status;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date CreatedAt;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date UpdatedAt;
-    @ManyToOne
-    Role role;
 
     @PrePersist
     protected void onCreate() {
@@ -47,3 +56,4 @@ public class User {
         UpdatedAt = new Date();
     }
 }
+

@@ -7,7 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -16,25 +15,24 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "fines")
+public class Fine {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    @Column(unique = true, nullable = false)
-    String name;
-    @Column(unique = true, nullable = false)
-    String email;
-    @Column(nullable = false)
-    String password;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    User user;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    BookLoan bookLoan;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date CreatedAt;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date UpdatedAt;
-    @ManyToOne
-    Role role;
 
     @PrePersist
     protected void onCreate() {
@@ -46,4 +44,5 @@ public class User {
     protected void onUpdate() {
         UpdatedAt = new Date();
     }
+
 }

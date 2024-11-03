@@ -16,25 +16,43 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "books")
+public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
     @Column(unique = true, nullable = false)
-    String name;
-    @Column(unique = true, nullable = false)
-    String email;
+    String title;
     @Column(nullable = false)
-    String password;
+    double price;
+
+    String description;
+
+    @ManyToOne
+    Publisher publisher;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+            name = "books_authors",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    Set<Author> authors;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+            name = "books_categories",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    Set<Category> categories;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date CreatedAt;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date UpdatedAt;
-    @ManyToOne
-    Role role;
 
     @PrePersist
     protected void onCreate() {

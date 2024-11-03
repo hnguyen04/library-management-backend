@@ -1,4 +1,7 @@
 package com.example.library_management_backend.exception;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
@@ -15,6 +18,10 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+    PERMISSION_EXISTED(1009, "Permission existed", HttpStatus.BAD_REQUEST),
+    PERMISSION_NOT_EXISTED(1010, "Permission not existed", HttpStatus.NOT_FOUND),
+    ROLE_EXISTED(1011, "Role existed", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_EXISTED(1012, "Role not existed", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

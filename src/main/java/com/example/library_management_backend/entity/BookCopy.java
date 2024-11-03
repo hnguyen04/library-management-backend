@@ -1,5 +1,6 @@
 package com.example.library_management_backend.entity;
 
+import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,25 +17,25 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "book_copies")
+public class BookCopy {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    @Column(unique = true, nullable = false)
-    String name;
-    @Column(unique = true, nullable = false)
-    String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    Book book;
+
     @Column(nullable = false)
-    String password;
+    @Enumerated(EnumType.STRING)
+    BookCopyStatusEnum status;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date CreatedAt;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date UpdatedAt;
-    @ManyToOne
-    Role role;
 
     @PrePersist
     protected void onCreate() {

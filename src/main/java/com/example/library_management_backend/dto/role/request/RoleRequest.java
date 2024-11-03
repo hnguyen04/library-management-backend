@@ -1,4 +1,5 @@
-package com.example.library_management_backend.dto.user.response;
+package com.example.library_management_backend.dto.role.request;
+
 
 import com.example.library_management_backend.constants.RoleEnum;
 import jakarta.persistence.EnumType;
@@ -6,20 +7,15 @@ import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    String id;
-    String name;
-    String email;
-    Date createdAt;
-    Date updatedAt;
-    int roleId;
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
+public class RoleRequest {
     @Enumerated(EnumType.STRING)
-    RoleEnum roleName;
+    RoleEnum name;
+    Set<Integer> permissions;
 }

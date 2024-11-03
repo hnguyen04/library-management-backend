@@ -61,7 +61,7 @@ public class UserController {
                 build();
     }
 
-    @PatchMapping("/Update")
+    @PutMapping("/Update")
     ApiResponse<UserResponse> updateUser(@RequestParam String id, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder().
                 result(userService.updateUser(id, request)).

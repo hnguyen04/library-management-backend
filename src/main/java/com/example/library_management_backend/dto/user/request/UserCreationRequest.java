@@ -1,8 +1,5 @@
 package com.example.library_management_backend.dto.user.request;
 
-import com.example.library_management_backend.constants.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +15,5 @@ public class UserCreationRequest {
     String email;
     @Size(min = 8, message = "Password must be at least 8 characters")
     String password;
-    @Enumerated(EnumType.STRING)
-    Role role;
+    int roleId;
 }

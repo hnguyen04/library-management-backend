@@ -1,6 +1,5 @@
 package com.example.library_management_backend.service;
 
-import com.example.library_management_backend.constants.Role;
 import com.example.library_management_backend.dto.user.request.UserCreationRequest;
 import com.example.library_management_backend.dto.user.request.UserGetAllRequest;
 import com.example.library_management_backend.dto.user.request.UserUpdateRequest;
@@ -9,6 +8,7 @@ import com.example.library_management_backend.entity.User;
 import com.example.library_management_backend.exception.AppException;
 import com.example.library_management_backend.exception.ErrorCode;
 import com.example.library_management_backend.mapper.UserMapper;
+import com.example.library_management_backend.repository.RoleRepository;
 import com.example.library_management_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,20 +28,24 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
     private final UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(roleRepository.findById(String.valueOf(request.getRoleId())).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)));
         try {
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException exception) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
-
-        return userMapper.toUserResponse(user);
+        UserResponse userResponse = userMapper.toUserResponse(user);
+        userResponse.setRoleName(user.getRole().getName());
+        userResponse.setRoleId(user.getRole().getId());
+        return userResponse;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -55,7 +59,6 @@ public class UserService {
 
         return userRepository.findAllByFilters(name, email)
                 .stream()
-                .map(userMapper::toUserResponse)
                 .skip(skipCount)
                 .limit(maxResultCount)
                 .collect(Collectors.toList());
@@ -69,7 +72,10 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        UserResponse userResponse = userMapper.toUserResponse(user);
+        userResponse.setRoleName(user.getRole().getName());
+        userResponse.setRoleId(user.getRole().getId());
+        return userResponse;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -82,8 +88,12 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUser(String id) {
-        return userMapper.toUserResponse(
-                userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        UserResponse userResponse = userMapper.toUserResponse(user);
+        userResponse.setRoleName(user.getRole().getName());
+        userResponse.setRoleId(user.getRole().getId());
+        return userResponse;
     }
 
     public UserResponse getMyInfo() {
@@ -92,7 +102,10 @@ public class UserService {
 
         User user = userRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        return userMapper.toUserResponse(user);
+        UserResponse userResponse = userMapper.toUserResponse(user);
+        userResponse.setRoleName(user.getRole().getName());
+        userResponse.setRoleId(user.getRole().getId());
+        return userResponse;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
