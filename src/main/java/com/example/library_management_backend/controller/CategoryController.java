@@ -2,6 +2,7 @@ package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.dto.ApiResponse;
 import com.example.library_management_backend.dto.category.request.CategoryCreationRequest;
+import com.example.library_management_backend.dto.category.request.CategoryGetAllRequest;
 import com.example.library_management_backend.dto.category.request.CategoryUpdateRequest;
 import com.example.library_management_backend.dto.category.response.CategoryResponse;
 import com.example.library_management_backend.service.CategoryService;
@@ -29,10 +30,18 @@ public class CategoryController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<CategoryResponse>> getAllCategories() {
-        return ApiResponse.<List<CategoryResponse>>builder().
-                result(categoryService.getAllCategories()).
-                build();
+    ApiResponse<List<CategoryResponse>> getAllCategories(
+            @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
+            @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount,
+            @RequestParam(value = "name", required = false) String name) {
+
+        CategoryGetAllRequest request = new CategoryGetAllRequest();
+        request.setSkipCount(skipCount);
+        request.setMaxResultCount(maxResultCount);
+        request.setName(name);
+        return ApiResponse.<List<CategoryResponse>>builder()
+                .result(categoryService.getAllCategories(request))
+                .build();
     }
 
     @GetMapping("/GetById")

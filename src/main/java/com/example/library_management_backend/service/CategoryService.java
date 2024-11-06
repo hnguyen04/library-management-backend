@@ -1,6 +1,7 @@
 package com.example.library_management_backend.service;
 
 import com.example.library_management_backend.dto.category.request.CategoryCreationRequest;
+import com.example.library_management_backend.dto.category.request.CategoryGetAllRequest;
 import com.example.library_management_backend.dto.category.request.CategoryUpdateRequest;
 import com.example.library_management_backend.dto.category.response.CategoryResponse;
 import com.example.library_management_backend.entity.Category;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +26,6 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse createCategory(CategoryCreationRequest request) {
         Category category = categoryMapper.toCategory(request);
         try {
@@ -37,14 +36,19 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(category);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAll().stream()
+    public List<CategoryResponse> getAllCategories(CategoryGetAllRequest request) {
+        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
+
+        return categoryRepository.findAllByFilters(name)
+                .stream()
+                .skip(skipCount)
+                .limit(maxResultCount)
                 .map(categoryMapper::toCategoryResponse)
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse updateCategory(String id, CategoryUpdateRequest request) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
@@ -53,7 +57,6 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(category);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategory(String id) {
         if (!categoryRepository.existsById(id)) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
@@ -61,7 +64,6 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse getCategory(String id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
