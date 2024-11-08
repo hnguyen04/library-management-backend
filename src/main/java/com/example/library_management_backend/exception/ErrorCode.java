@@ -23,7 +23,11 @@ public enum ErrorCode {
     ROLE_EXISTED(1011, "Role existed", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(1012, "Role not existed", HttpStatus.NOT_FOUND),
     CATEGORY_EXISTED(1013,"Category existed" , HttpStatus.BAD_REQUEST),
-    CATEGORY_NOT_EXISTED(1014,"Category not existed" , HttpStatus.NOT_FOUND);
+    CATEGORY_NOT_EXISTED(1014,"Category not existed" , HttpStatus.NOT_FOUND),
+    PUBLISHER_EXISTED(1015,"Publisher existed" , HttpStatus.BAD_REQUEST),
+    PUBLISHER_NOT_EXISTED(1016,"Publisher not existed" , HttpStatus.NOT_FOUND),
+    AUTHOR_EXISTED(1017,"Author existed" , HttpStatus.BAD_REQUEST),
+    AUTHOR_NOT_EXISTED(1018,"Author not existed" , HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
