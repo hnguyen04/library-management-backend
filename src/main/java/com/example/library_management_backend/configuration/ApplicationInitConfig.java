@@ -53,7 +53,7 @@ public class ApplicationInitConfig {
 
                 log.warn("Default admin user created with username: admin and password: admin");
             }
-            
+
         };
     }
 }
