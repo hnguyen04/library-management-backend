@@ -45,14 +45,14 @@ public class AuthorController {
     }
 
     @GetMapping("/GetById")
-    ApiResponse<AuthorResponse> getAuthorById(@RequestParam String id) {
+    ApiResponse<AuthorResponse> getAuthorById(@RequestParam int id) {
         return ApiResponse.<AuthorResponse>builder().
                 result(authorService.getAuthor(id)).
                 build();
     }
 
     @DeleteMapping("/Delete")
-    ApiResponse<String> deleteAuthor(@RequestParam String id) {
+    ApiResponse<String> deleteAuthor(@RequestParam int id) {
         authorService.deleteAuthor(id);
         return ApiResponse.<String>builder().
                 result("Author deleted successfully").
@@ -60,7 +60,7 @@ public class AuthorController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<AuthorResponse> updateAuthor(@RequestParam String id, @RequestBody AuthorUpdateRequest request) {
+    ApiResponse<AuthorResponse> updateAuthor(@RequestParam int id, @RequestBody AuthorUpdateRequest request) {
         return ApiResponse.<AuthorResponse>builder().
                 result(authorService.updateAuthor(id, request)).
                 build();

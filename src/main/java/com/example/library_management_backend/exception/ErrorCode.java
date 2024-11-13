@@ -27,7 +27,9 @@ public enum ErrorCode {
     PUBLISHER_EXISTED(1015,"Publisher existed" , HttpStatus.BAD_REQUEST),
     PUBLISHER_NOT_EXISTED(1016,"Publisher not existed" , HttpStatus.NOT_FOUND),
     AUTHOR_EXISTED(1017,"Author existed" , HttpStatus.BAD_REQUEST),
-    AUTHOR_NOT_EXISTED(1018,"Author not existed" , HttpStatus.NOT_FOUND);
+    AUTHOR_NOT_EXISTED(1018,"Author not existed" , HttpStatus.NOT_FOUND),
+    BOOK_EXISTED(1019,"Book existed" , HttpStatus.BAD_REQUEST),
+    BOOK_NOT_EXISTED(1020,"Book not existed" , HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

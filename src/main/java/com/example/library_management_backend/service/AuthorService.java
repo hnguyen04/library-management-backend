@@ -49,23 +49,23 @@ public class AuthorService {
                 .collect(Collectors.toList());
     }
 
-    public AuthorResponse updateAuthor(String id, AuthorUpdateRequest request) {
-        Author author = authorRepository.findById(id)
+    public AuthorResponse updateAuthor(int id, AuthorUpdateRequest request) {
+        Author author = authorRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXISTED));
         authorMapper.updateAuthor(author, request);
         author = authorRepository.save(author);
         return authorMapper.toAuthorResponse(author);
     }
 
-    public void deleteAuthor(String id) {
-        if (!authorRepository.existsById(id)) {
+    public void deleteAuthor(int id) {
+        if (!authorRepository.existsById(String.valueOf(id))) {
             throw new AppException(ErrorCode.AUTHOR_NOT_EXISTED);
         }
-        authorRepository.deleteById(id);
+        authorRepository.deleteById(String.valueOf(id));
     }
 
-    public AuthorResponse getAuthor(String id) {
-        Author author = authorRepository.findById(id)
+    public AuthorResponse getAuthor(int id) {
+        Author author = authorRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXISTED));
         return authorMapper.toAuthorResponse(author);
     }
