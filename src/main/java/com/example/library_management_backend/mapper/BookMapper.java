@@ -10,11 +10,12 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    @Mapping(target = "publisher", ignore = true)
     @Mapping(target = "authors", ignore = true)
     @Mapping(target = "categories", ignore = true)
     Book toBook(BookCreationRequest request);
 
+    @Mapping(target = "publisherId", ignore = true)
+    @Mapping(target = "publisherName", ignore = true)
     BookResponse toBookResponse(Book book);
 
     @Mapping(target = "publisher", ignore = true)
