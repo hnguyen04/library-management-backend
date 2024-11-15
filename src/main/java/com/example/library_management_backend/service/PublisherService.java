@@ -48,7 +48,6 @@ public class PublisherService {
                 .map(publisherMapper::toPublisherResponse)
                 .collect(Collectors.toList());
     }
-
     public PublisherResponse updatePublisher(int id, PublisherUpdateRequest request) {
         Publisher publisher = publisherRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_EXISTED));
@@ -56,16 +55,15 @@ public class PublisherService {
         publisher = publisherRepository.save(publisher);
         return publisherMapper.toPublisherResponse(publisher);
     }
-
     public void deletePublisher(int id) {
-        if (!publisherRepository.existsById(String.valueOf(id))) {
+        if (!publisherRepository.existsById(id)) {
             throw new AppException(ErrorCode.PUBLISHER_NOT_EXISTED);
         }
-        publisherRepository.deleteById(String.valueOf(id));
+        publisherRepository.deleteById(id);
     }
 
     public PublisherResponse getPublisher(int id) {
-        Publisher publisher = publisherRepository.findById(String.valueOf(id))
+        Publisher publisher = publisherRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_EXISTED));
         return publisherMapper.toPublisherResponse(publisher);
     }
