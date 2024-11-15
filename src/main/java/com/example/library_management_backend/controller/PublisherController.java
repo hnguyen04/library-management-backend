@@ -45,14 +45,14 @@ public class PublisherController {
     }
 
     @GetMapping("/GetById")
-    ApiResponse<PublisherResponse> getPublisherById(@RequestParam String id) {
+    ApiResponse<PublisherResponse> getPublisherById(@RequestParam int id) {
         return ApiResponse.<PublisherResponse>builder().
                 result(publisherService.getPublisher(id)).
                 build();
     }
 
     @DeleteMapping("/Delete")
-    ApiResponse<String> deletePublisher(@RequestParam String id) {
+    ApiResponse<String> deletePublisher(@RequestParam int id) {
         publisherService.deletePublisher(id);
         return ApiResponse.<String>builder().
                 result("Publisher deleted successfully").
@@ -60,7 +60,7 @@ public class PublisherController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<PublisherResponse> updatePublisher(@RequestParam String id, @RequestBody PublisherUpdateRequest request) {
+    ApiResponse<PublisherResponse> updatePublisher(@RequestParam int id, @RequestBody PublisherUpdateRequest request) {
         return ApiResponse.<PublisherResponse>builder().
                 result(publisherService.updatePublisher(id, request)).
                 build();

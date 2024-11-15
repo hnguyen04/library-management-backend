@@ -1,4 +1,4 @@
-package com.example.library_management_backend.dto.publisher.request;
+package com.example.library_management_backend.dto.author.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PublisherCreationRequest {
+public class AuthorCreationRequest {
     @NotBlank(message = "Name is mandatory")
     String name;
 }

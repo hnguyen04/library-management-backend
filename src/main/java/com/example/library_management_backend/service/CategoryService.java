@@ -49,23 +49,23 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryResponse updateCategory(String id, CategoryUpdateRequest request) {
-        Category category = categoryRepository.findById(id)
+    public CategoryResponse updateCategory(int id, CategoryUpdateRequest request) {
+        Category category = categoryRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         categoryMapper.updateCategory(category, request);
         category = categoryRepository.save(category);
         return categoryMapper.toCategoryResponse(category);
     }
 
-    public void deleteCategory(String id) {
-        if (!categoryRepository.existsById(id)) {
+    public void deleteCategory(int id) {
+        if (!categoryRepository.existsById(String.valueOf(id))) {
             throw new AppException(ErrorCode.CATEGORY_NOT_EXISTED);
         }
-        categoryRepository.deleteById(id);
+        categoryRepository.deleteById(String.valueOf(id));
     }
 
-    public CategoryResponse getCategory(String id) {
-        Category category = categoryRepository.findById(id)
+    public CategoryResponse getCategory(int id) {
+        Category category = categoryRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         return categoryMapper.toCategoryResponse(category);
     }
