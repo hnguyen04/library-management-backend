@@ -11,5 +11,5 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryGetAllRequest extends BaseGetAllRequest {
-        String name;
+    String name;
 }

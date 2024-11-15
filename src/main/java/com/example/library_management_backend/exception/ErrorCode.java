@@ -26,7 +26,6 @@ public enum ErrorCode {
     CATEGORY_NOT_EXISTED(1014,"Category not existed" , HttpStatus.NOT_FOUND),
     PUBLISHER_EXISTED(1015,"Publisher existed" , HttpStatus.BAD_REQUEST),
     PUBLISHER_NOT_EXISTED(1016,"Publisher not existed" , HttpStatus.NOT_FOUND);
-    ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
