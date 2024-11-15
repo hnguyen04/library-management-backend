@@ -45,14 +45,14 @@ public class CategoryController {
     }
 
     @GetMapping("/GetById")
-    ApiResponse<CategoryResponse> getCategoryById(@RequestParam String id) {
+    ApiResponse<CategoryResponse> getCategoryById(@RequestParam int id) {
         return ApiResponse.<CategoryResponse>builder().
                 result(categoryService.getCategory(id)).
                 build();
     }
 
     @DeleteMapping("/Delete")
-    ApiResponse<String> deleteCategory(@RequestParam String id) {
+    ApiResponse<String> deleteCategory(@RequestParam int id) {
         categoryService.deleteCategory(id);
         return ApiResponse.<String>builder().
                 result("Category deleted successfully").
@@ -60,7 +60,7 @@ public class CategoryController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<CategoryResponse> updateCategory(@RequestParam String id, @RequestBody CategoryUpdateRequest request) {
+    ApiResponse<CategoryResponse> updateCategory(@RequestParam int id, @RequestBody CategoryUpdateRequest request) {
         return ApiResponse.<CategoryResponse>builder().
                 result(categoryService.updateCategory(id, request)).
                 build();
