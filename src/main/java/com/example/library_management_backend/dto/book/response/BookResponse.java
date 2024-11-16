@@ -1,8 +1,7 @@
 package com.example.library_management_backend.dto.book.response;
 
-import com.example.library_management_backend.dto.author.response.AuthorResponse;
-import com.example.library_management_backend.dto.category.response.CategoryResponse;
-import com.example.library_management_backend.dto.publisher.response.PublisherResponse;
+import com.example.library_management_backend.entity.Author;
+import com.example.library_management_backend.entity.Category;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,9 +18,10 @@ public class BookResponse {
     String title;
     double price;
     String description;
-    PublisherResponse publisher;
-    Set<AuthorResponse> authors;
-    Set<CategoryResponse> categories;
+    int publisherId;
+    String publisherName;
+    Set<Author> authors;
+    Set<Category> categories;
     Date createdAt;
     Date updatedAt;
 }

@@ -14,6 +14,6 @@ import java.util.Set;
 public class BookGetAllRequest extends BaseGetAllRequest {
     String title;
     Integer publisherId;
-    Set<Integer> authorIds;
-    Set<Integer> categoryIds;
+    Integer authorId;
+    Integer categoryId;
 }

@@ -42,8 +42,8 @@ public class BookController {
         BookGetAllRequest request = new BookGetAllRequest();
         request.setTitle(title);
         request.setPublisherId(publisherId);
-        request.setAuthorIds(authorId != null ? Set.of(authorId) : null);
-        request.setCategoryIds(categoryId != null ? Set.of(categoryId) : null);
+        request.setAuthorId(authorId);
+        request.setCategoryId(categoryId);
         request.setSkipCount(skipCount);
         request.setMaxResultCount(maxResultCount);
         return ApiResponse.<List<BookResponse>>builder()
