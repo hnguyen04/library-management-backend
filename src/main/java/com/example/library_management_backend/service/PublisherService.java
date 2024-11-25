@@ -56,14 +56,14 @@ public class PublisherService {
         return publisherMapper.toPublisherResponse(publisher);
     }
     public void deletePublisher(int id) {
-        if (!publisherRepository.existsById(id)) {
+        if (!publisherRepository.existsById(String.valueOf(id))) {
             throw new AppException(ErrorCode.PUBLISHER_NOT_EXISTED);
         }
-        publisherRepository.deleteById(id);
+        publisherRepository.deleteById(String.valueOf(id));
     }
 
     public PublisherResponse getPublisher(int id) {
-        Publisher publisher = publisherRepository.findById(id)
+        Publisher publisher = publisherRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_EXISTED));
         return publisherMapper.toPublisherResponse(publisher);
     }

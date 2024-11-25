@@ -23,7 +23,9 @@ public class User {
     String id;
     @Column(unique = true, nullable = false)
     String name;
-    @Column(unique = true, nullable = false)
+    @Column
+    String userName;
+    @Column(unique = true)
     String email;
     @Column(nullable = false)
     String password;

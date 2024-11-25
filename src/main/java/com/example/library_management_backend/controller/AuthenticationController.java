@@ -3,6 +3,7 @@ package com.example.library_management_backend.controller;
 import com.example.library_management_backend.dto.ApiResponse;
 import com.example.library_management_backend.dto.authen.request.AuthenticationRequest;
 import com.example.library_management_backend.dto.authen.request.IntrospectRequest;
+import com.example.library_management_backend.dto.authen.request.LogoutRequest;
 import com.example.library_management_backend.dto.authen.response.AuthenticationResponse;
 import com.example.library_management_backend.dto.authen.response.IntrospectResponse;
 import com.example.library_management_backend.service.AuthenticationService;
@@ -37,6 +38,14 @@ public class AuthenticationController {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/Logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws JOSEException, ParseException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 

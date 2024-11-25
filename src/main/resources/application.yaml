@@ -5,6 +5,9 @@ server:
 
 
 spring:
+  main:
+    allow-circular-references: true
+
   application:
     name: library-management
 
@@ -18,7 +21,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
    hibernate:
-     ddl-auto: none
+     ddl-auto: update
    show-sql: true
    properties:
      hibernate:

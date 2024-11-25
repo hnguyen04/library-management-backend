@@ -46,6 +46,7 @@ public class ApplicationInitConfig {
             if (userRepository.findByName("admin").isEmpty()) {
                 userRepository.save(User.builder()
                         .name("admin")
+                        .userName("admin")
                         .password(passwordEncoder.encode("admin"))
                         .email("admin@gmail.com")
                         .role(roleRepository.findByName(RoleEnum.ADMIN).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)))
