@@ -4,6 +4,7 @@ import com.example.library_management_backend.dto.ApiResponse;
 import com.example.library_management_backend.dto.authen.request.AuthenticationRequest;
 import com.example.library_management_backend.dto.authen.request.IntrospectRequest;
 import com.example.library_management_backend.dto.authen.request.LogoutRequest;
+import com.example.library_management_backend.dto.authen.request.RefreshRequest;
 import com.example.library_management_backend.dto.authen.response.AuthenticationResponse;
 import com.example.library_management_backend.dto.authen.response.IntrospectResponse;
 import com.example.library_management_backend.service.AuthenticationService;
@@ -46,6 +47,15 @@ public class AuthenticationController {
             throws JOSEException, ParseException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/Refresh")
+    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request)
+            throws JOSEException, ParseException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
                 .build();
     }
 

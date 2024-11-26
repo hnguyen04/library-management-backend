@@ -17,23 +17,30 @@ public class GlobalExceptionHandler {
     private static final String MIN_ATTRIBUTE = "min";
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
-        log.error("Exception: ", exception);
-        ApiResponse apiResponse = new ApiResponse();
+    public ResponseEntity<ApiResponse<Object>> handleGeneralException(Exception exception) {
+        log.error("Unhandled Exception: ", exception);
 
-        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+        ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
+                .success(false)
+                .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
+                .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
+                .error(exception.getMessage())
+                .build();
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
+    // Xử lý các Exception tùy chỉnh (AppException)
     @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse> handlingAppException(AppException exception) {
+    public ResponseEntity<ApiResponse<Object>> handleAppException(AppException exception) {
         ErrorCode errorCode = exception.getErrorCode();
-        ApiResponse apiResponse = new ApiResponse();
 
-        apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        ApiResponse<Object> apiResponse = ApiResponse.<Object>builder()
+                .success(false)
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .error(exception.getMessage())
+                .build();
 
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
