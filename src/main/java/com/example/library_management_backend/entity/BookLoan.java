@@ -19,8 +19,8 @@ import java.util.Date;
 @Table(name = "book_loans")
 public class BookLoan {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     BookCopy bookCopy;

@@ -20,8 +20,8 @@ import java.util.Set;
 @Table(name = "book_copies")
 public class BookCopy {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     Book book;
