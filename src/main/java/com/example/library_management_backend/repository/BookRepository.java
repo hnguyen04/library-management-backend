@@ -17,7 +17,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
             "AND (:authorId IS NULL OR :authorId MEMBER OF b.authors) " +
             "AND (:categoryId IS NULL OR :categoryId MEMBER OF b.categories)")
     List<Book> findAllByFilters(@Param("title") String title,
-                                        @Param("publisherId") Integer publisherId,
-                                        @Param("authorId") Integer authorId,
-                                        @Param("categoryId") Integer categoryId);
+                                @Param("publisherId") Integer publisherId,
+                                @Param("authorId") Integer authorId,
+                                @Param("categoryId") Integer categoryId);
 }
