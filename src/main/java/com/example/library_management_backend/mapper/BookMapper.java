@@ -14,8 +14,8 @@ public interface BookMapper {
     @Mapping(target = "categories", ignore = true)
     Book toBook(BookCreationRequest request);
 
-    @Mapping(target = "publisherId", ignore = true)
-    @Mapping(target = "publisherName", ignore = true)
+    @Mapping(target = "publisherId", source = "publisher.id")
+    @Mapping(target = "publisherName", source = "publisher.name")
     BookResponse toBookResponse(Book book);
 
     @Mapping(target = "publisher", ignore = true)

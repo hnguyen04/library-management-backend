@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,10 +19,10 @@ import java.util.Set;
 @Table(name = "book_copies")
 public class BookCopy {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     Book book;
 
     @Column(nullable = false)
@@ -32,19 +31,19 @@ public class BookCopy {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    Date CreatedAt;
+    Date createdAt;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    Date UpdatedAt;
+    Date updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        CreatedAt = new Date();
-        UpdatedAt = new Date();
+        createdAt = new Date();
+        updatedAt = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        UpdatedAt = new Date();
+        updatedAt = new Date();
     }
 }
