@@ -68,9 +68,7 @@ public class UserService {
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userMapper.updateUser(user, request);
-        if (request.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-        }
+        user = userRepository.save(user);
 
         UserResponse userResponse = userMapper.toUserResponse(user);
         userResponse.setRoleName(user.getRole().getName());

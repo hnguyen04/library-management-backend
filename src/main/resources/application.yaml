@@ -8,6 +8,14 @@ spring:
   main:
     allow-circular-references: true
 
+  web:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+      allow-credentials: true
+
+
   application:
     name: library-management
 

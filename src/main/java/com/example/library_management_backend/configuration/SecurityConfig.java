@@ -52,26 +52,32 @@ public class SecurityConfig {
 
 
         );
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.cors(cors -> cors.configurationSource(request -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.addAllowedOriginPattern("*");
+            corsConfiguration.addAllowedMethod("*");
+            corsConfiguration.addAllowedHeader("*"); // Cho phép tất cả các header, bao gồm Authorization
+            corsConfiguration.setAllowCredentials(true);
+            return corsConfiguration;
+        })).csrf(AbstractHttpConfigurer::disable);
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
     }
 
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addAllowedHeader("*");
-
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-
-        return new CorsFilter(urlBasedCorsConfigurationSource);
-    }
-
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.addAllowedOriginPattern("*");
+//        config.setAllowCredentials(true);
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//
+//        return new CorsFilter(source);
+//    }
 
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {

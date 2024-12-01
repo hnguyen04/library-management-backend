@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByName(String name);
 
     @Query("SELECT new com.example.library_management_backend.dto.user.response.UserResponse(" +
-            "u.id, u.name, u.email, u.CreatedAt, u.UpdatedAt, r.id, r.name) " +
+            "u.id, u.name, u.userName, u.email, u.CreatedAt, u.UpdatedAt, r.id, r.name) " +
             "FROM User u " +
             "LEFT JOIN u.role r " +
             "WHERE (:name IS NULL OR u.name = :name) " +
