@@ -30,7 +30,8 @@ public enum ErrorCode {
     AUTHOR_NOT_EXISTED(1018,"Author not existed" , HttpStatus.NOT_FOUND),
     BOOK_EXISTED(1019,"Book existed" , HttpStatus.BAD_REQUEST),
     BOOK_NOT_EXISTED(1020,"Book not existed" , HttpStatus.NOT_FOUND),
-    BOOK_COPY_NOT_EXISTED(1021,"BookCopy not existed" , HttpStatus.NOT_FOUND);
+    BOOK_COPY_NOT_EXISTED(1021,"BookCopy not existed" , HttpStatus.NOT_FOUND),
+    WRONG_PASSWORD(1100,"Wrong password" , HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

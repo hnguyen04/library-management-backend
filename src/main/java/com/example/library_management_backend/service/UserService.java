@@ -1,13 +1,17 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.dto.user.request.ChangePasswordRequest;
 import com.example.library_management_backend.dto.user.request.UserCreationRequest;
 import com.example.library_management_backend.dto.user.request.UserGetAllRequest;
 import com.example.library_management_backend.dto.user.request.UserUpdateRequest;
+import com.example.library_management_backend.dto.user.response.UserConfigurationResponse;
 import com.example.library_management_backend.dto.user.response.UserResponse;
+import com.example.library_management_backend.entity.Permission;
 import com.example.library_management_backend.entity.User;
 import com.example.library_management_backend.exception.AppException;
 import com.example.library_management_backend.exception.ErrorCode;
 import com.example.library_management_backend.mapper.UserMapper;
+import com.example.library_management_backend.repository.PermissionRepository;
 import com.example.library_management_backend.repository.RoleRepository;
 import com.example.library_management_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +35,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private PermissionRepository permissionRepository;
     private final UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -121,6 +128,53 @@ public class UserService {
         } catch (Exception exception) {
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
+    }
+
+    public void changePassword(ChangePasswordRequest request) {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.WRONG_PASSWORD);
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    public UserConfigurationResponse getAllConfigurations() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        UserConfigurationResponse configResponse = new UserConfigurationResponse();
+
+        List<Permission> allPermissionsList = permissionRepository.findAll();
+
+        Set<Permission> grantedPermissionsSet = user.getRole().getPermissions();
+
+        Map<String, Boolean> allPermissions = allPermissionsList.stream()
+                .collect(Collectors.toMap(
+                        Permission::getName,
+                        permission -> grantedPermissionsSet.contains(permission) // Nếu tồn tại trong granted thì là true
+                ));
+
+        Map<String, Boolean> grantedPermissions = grantedPermissionsSet.stream()
+                .collect(Collectors.toMap(Permission::getName, permission -> true));
+
+        UserConfigurationResponse.AuthPermissions authPermissions = UserConfigurationResponse.AuthPermissions.builder()
+                .allPermissions(allPermissions)
+                .grantedPermissions(grantedPermissions)
+                .build();
+
+
+        // Tạo response DTO
+        configResponse.setRoleName(user.getRole().getName());
+        configResponse.setRoleId(user.getRole().getId());
+        configResponse.setAuth(authPermissions);
+
+        return configResponse;
     }
 
 }

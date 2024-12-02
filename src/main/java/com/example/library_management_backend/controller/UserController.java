@@ -1,9 +1,11 @@
 package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.user.request.ChangePasswordRequest;
 import com.example.library_management_backend.dto.user.request.UserCreationRequest;
 import com.example.library_management_backend.dto.user.request.UserGetAllRequest;
 import com.example.library_management_backend.dto.user.request.UserUpdateRequest;
+import com.example.library_management_backend.dto.user.response.UserConfigurationResponse;
 import com.example.library_management_backend.dto.user.response.UserResponse;
 import com.example.library_management_backend.service.UserService;
 import lombok.AccessLevel;
@@ -80,6 +82,21 @@ public class UserController {
         userService.deleteManyUsers(ids);
         return ApiResponse.<String>builder().
                 result("Users deleted successfully").
+                build();
+    }
+
+    @PutMapping("/ChangePassword")
+    ApiResponse<String> changePassword(@RequestBody ChangePasswordRequest request) {
+        userService.changePassword(request);
+        return ApiResponse.<String>builder().
+                result("Password changed successfully").
+                build();
+    }
+
+    @GetMapping("/GetAllConfigurations")
+    ApiResponse<UserConfigurationResponse> getAllConfigurations() {
+        return ApiResponse.<UserConfigurationResponse>builder().
+                result(userService.getAllConfigurations()).
                 build();
     }
 }
