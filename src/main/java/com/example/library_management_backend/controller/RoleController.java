@@ -1,6 +1,7 @@
 package com.example.library_management_backend.controller;
 
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.role.request.RoleRequest;
 import com.example.library_management_backend.dto.role.response.RoleResponse;
 import com.example.library_management_backend.service.RoleService;
@@ -28,8 +29,8 @@ public class RoleController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<RoleResponse>> getAllRole() {
-        return ApiResponse.<List<RoleResponse>>builder().
+    ApiResponse<BaseGetAllResponse<RoleResponse>> getAllRole() {
+        return ApiResponse.<BaseGetAllResponse<RoleResponse>>builder().
                 result(roleService.getAllRole()).
                 build();
     }
@@ -42,9 +43,9 @@ public class RoleController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<RoleResponse> updateRole(@RequestParam int id, @RequestBody RoleRequest request) {
+    ApiResponse<RoleResponse> updateRole(@RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder().
-                result(roleService.updateRole(id, request)).
+                result(roleService.updateRole(request)).
                 build();
     }
 

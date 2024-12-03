@@ -1,6 +1,6 @@
 package com.example.library_management_backend.controller;
 
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.book.request.BookCreationRequest;
 import com.example.library_management_backend.dto.book.request.BookGetAllRequest;
 import com.example.library_management_backend.dto.book.request.BookUpdateRequest;

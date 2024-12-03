@@ -1,5 +1,7 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
+import com.example.library_management_backend.dto.permission.request.PermissionGetAllRequest;
 import com.example.library_management_backend.dto.permission.request.PermissionRequest;
 import com.example.library_management_backend.dto.permission.response.PermissionResponse;
 import com.example.library_management_backend.entity.Permission;
@@ -32,11 +34,21 @@ public class PermissionService {
         return permissionMapper.toPermissionResponse(permission);
     }
 
-    public List<PermissionResponse> getAllPermission() {
-        return permissionRepository.findAll()
+    public BaseGetAllResponse<PermissionResponse> getAllPermission(PermissionGetAllRequest request) {
+        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+
+        List<PermissionResponse> permissionList =  permissionRepository.findAll()
                 .stream()
+                .skip(skipCount)
+                .limit(maxResultCount)
                 .map(permissionMapper::toPermissionResponse)
                 .toList();
+
+        return BaseGetAllResponse.<PermissionResponse>builder()
+                .data(permissionList)
+                .totalRecords(permissionRepository.count())
+                .build();
     }
 
     public PermissionResponse getPermissionById(int id) {
@@ -44,8 +56,8 @@ public class PermissionService {
         return permissionMapper.toPermissionResponse(permission);
     }
 
-    public PermissionResponse updatePermission(int id, PermissionRequest request) {
-        Permission permission = permissionRepository.findById(String.valueOf(id)).orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
+    public PermissionResponse updatePermission(PermissionRequest request) {
+        Permission permission = permissionRepository.findById(String.valueOf(request.getId())).orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
         permissionMapper.updatePermission(permission, request);
         permission = permissionRepository.save(permission);
         return permissionMapper.toPermissionResponse(permission);

@@ -1,6 +1,8 @@
 package com.example.library_management_backend.controller;
 
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
+import com.example.library_management_backend.dto.permission.request.PermissionGetAllRequest;
 import com.example.library_management_backend.dto.permission.request.PermissionRequest;
 import com.example.library_management_backend.dto.permission.response.PermissionResponse;
 import com.example.library_management_backend.service.PermissionService;
@@ -28,9 +30,15 @@ public class PermissionController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<PermissionResponse>> getAllPermission() {
-        return ApiResponse.<List<PermissionResponse>>builder().
-                result(permissionService.getAllPermission()).
+    ApiResponse<BaseGetAllResponse<PermissionResponse>> getAllPermission(
+            @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
+            @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount
+    ) {
+        PermissionGetAllRequest request = new PermissionGetAllRequest();
+        request.setSkipCount(skipCount);
+        request.setMaxResultCount(maxResultCount);
+        return ApiResponse.<BaseGetAllResponse<PermissionResponse>>builder().
+                result(permissionService.getAllPermission(request)).
                 build();
     }
 
@@ -42,9 +50,9 @@ public class PermissionController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<PermissionResponse> updatePermission(@RequestParam int id, @RequestBody PermissionRequest request) {
+    ApiResponse<PermissionResponse> updatePermission(@RequestBody PermissionRequest request) {
         return ApiResponse.<PermissionResponse>builder().
-                result(permissionService.updatePermission(id, request)).
+                result(permissionService.updatePermission(request)).
                 build();
     }
 

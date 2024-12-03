@@ -1,17 +1,15 @@
 package com.example.library_management_backend.dto.user.request;
 
-import com.example.library_management_backend.dto.base.request.BaseGetAllRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserGetAllRequest extends BaseGetAllRequest {
-    String name;
-    String Email;
-    Integer roleId;
+public class ResetPasswordRequest {
+    String adminPassword;
+    String newPassword;
+    String userId;
 }

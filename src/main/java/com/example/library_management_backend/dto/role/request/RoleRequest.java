@@ -15,6 +15,7 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 public class RoleRequest {
+    int id;
     @Enumerated(EnumType.STRING)
     RoleEnum name;
     Set<Integer> permissions;

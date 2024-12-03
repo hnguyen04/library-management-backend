@@ -1,9 +1,7 @@
 package com.example.library_management_backend.service;
 
-import com.example.library_management_backend.dto.user.request.ChangePasswordRequest;
-import com.example.library_management_backend.dto.user.request.UserCreationRequest;
-import com.example.library_management_backend.dto.user.request.UserGetAllRequest;
-import com.example.library_management_backend.dto.user.request.UserUpdateRequest;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
+import com.example.library_management_backend.dto.user.request.*;
 import com.example.library_management_backend.dto.user.response.UserConfigurationResponse;
 import com.example.library_management_backend.dto.user.response.UserResponse;
 import com.example.library_management_backend.entity.Permission;
@@ -56,24 +54,31 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getAllUsers(UserGetAllRequest request) {
+    public BaseGetAllResponse<UserResponse> getAllUsers(UserGetAllRequest request) {
         log.info("in getAllUsers function");
 
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
         String email = (request.getEmail() == null || request.getEmail().isEmpty()) ? null : request.getEmail();
+        Integer roleId = request.getRoleId() != null ? request.getRoleId() : null;
 
-        return userRepository.findAllByFilters(name, email)
+        List<UserResponse> userResponseList = userRepository.findAllByFilters(name, email, roleId)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
                 .collect(Collectors.toList());
+
+        return BaseGetAllResponse.<UserResponse>builder()
+                .data(userResponseList)
+                .totalRecords(userRepository.countByFilters(name, email, roleId))
+                .build();
     }
 
+
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse updateUser(String userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    public UserResponse updateUser(UserUpdateRequest request) {
+        User user = userRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userMapper.updateUser(user, request);
         user = userRepository.save(user);
 
@@ -168,13 +173,23 @@ public class UserService {
                 .grantedPermissions(grantedPermissions)
                 .build();
 
-
-        // Tạo response DTO
         configResponse.setRoleName(user.getRole().getName());
         configResponse.setRoleId(user.getRole().getId());
         configResponse.setAuth(authPermissions);
 
         return configResponse;
+    }
+
+    public void resetPassword(ResetPasswordRequest request) {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        User admin = userRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (!passwordEncoder.matches(request.getAdminPassword(), admin.getPassword())) {
+            throw new AppException(ErrorCode.WRONG_PASSWORD);
+        }
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
 }

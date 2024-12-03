@@ -22,7 +22,19 @@ public interface UserRepository extends JpaRepository<User, String> {
             "LEFT JOIN u.role r " +
             "WHERE (:name IS NULL OR u.name = :name) " +
             "AND (:email IS NULL OR u.email = :email) " +
+            "AND (:roleId IS NULL OR r.id = :roleId) " +
             "ORDER BY u.CreatedAt DESC")
     List<UserResponse> findAllByFilters(@Param("name") String name,
-                                        @Param("email") String email);
+                                        @Param("email") String email,
+                                        @Param("roleId") Integer roleId);
+
+    @Query("SELECT COUNT(u) " +
+            "FROM User u " +
+            "LEFT JOIN u.role r " +
+            "WHERE (:name IS NULL OR u.name = :name) " +
+            "AND (:email IS NULL OR u.email = :email) " +
+            "AND (:roleId IS NULL OR r.id = :roleId)")
+    long countByFilters(@Param("name") String name,
+                        @Param("email") String email,
+                        @Param("roleId") Integer roleId);
 }

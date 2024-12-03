@@ -10,5 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
 public class PermissionRequest {
+    int id;
     String name;
 }

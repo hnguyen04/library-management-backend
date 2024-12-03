@@ -1,7 +1,6 @@
-package com.example.library_management_backend.dto.base;
+package com.example.library_management_backend.dto.base.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter

@@ -1,10 +1,9 @@
 package com.example.library_management_backend.controller;
 
-import com.example.library_management_backend.dto.ApiResponse;
-import com.example.library_management_backend.dto.user.request.ChangePasswordRequest;
-import com.example.library_management_backend.dto.user.request.UserCreationRequest;
-import com.example.library_management_backend.dto.user.request.UserGetAllRequest;
-import com.example.library_management_backend.dto.user.request.UserUpdateRequest;
+import com.example.library_management_backend.dto.authen.request.IntrospectRequest;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
+import com.example.library_management_backend.dto.user.request.*;
 import com.example.library_management_backend.dto.user.response.UserConfigurationResponse;
 import com.example.library_management_backend.dto.user.response.UserResponse;
 import com.example.library_management_backend.service.UserService;
@@ -32,18 +31,23 @@ public class UserController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<UserResponse>> getAllUser(
+    ApiResponse<BaseGetAllResponse<UserResponse>> getAllUser(
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "email", required = false) String email) {
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "roleId", required = false) Integer roleId
+    ) {
 
-        UserGetAllRequest request = new UserGetAllRequest();
+        UserGetAllRequest request = UserGetAllRequest.builder()
+                .roleId(roleId)
+                .name(name)
+                .Email(email)
+                .build();
         request.setSkipCount(skipCount);
         request.setMaxResultCount(maxResultCount);
-        request.setName(name);
-        request.setEmail(email);
-        return ApiResponse.<List<UserResponse>>builder().
+
+        return ApiResponse.<BaseGetAllResponse<UserResponse>>builder().
                 result(userService.getAllUsers(request)).
                 build();
     }
@@ -64,9 +68,9 @@ public class UserController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<UserResponse> updateUser(@RequestParam String id, @RequestBody UserUpdateRequest request) {
+    ApiResponse<UserResponse> updateUser(@RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder().
-                result(userService.updateUser(id, request)).
+                result(userService.updateUser(request)).
                 build();
     }
 
@@ -98,5 +102,12 @@ public class UserController {
         return ApiResponse.<UserConfigurationResponse>builder().
                 result(userService.getAllConfigurations()).
                 build();
+    }
+
+    @PutMapping("/ResetPassword")
+    ApiResponse<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
+        userService.resetPassword(request);
+        return ApiResponse.<Void>builder().build();
+
     }
 }

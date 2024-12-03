@@ -1,6 +1,6 @@
 package com.example.library_management_backend.configuration;
 
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

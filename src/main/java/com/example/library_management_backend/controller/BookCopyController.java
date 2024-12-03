@@ -1,7 +1,7 @@
 package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.constants.BookCopyStatusEnum;
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyCreationRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyGetAllRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyUpdateRequest;

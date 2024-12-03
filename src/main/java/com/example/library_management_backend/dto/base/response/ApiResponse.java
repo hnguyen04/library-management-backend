@@ -1,4 +1,4 @@
-package com.example.library_management_backend.dto;
+package com.example.library_management_backend.dto.base.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

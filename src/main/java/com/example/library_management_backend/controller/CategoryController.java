@@ -1,6 +1,6 @@
 package com.example.library_management_backend.controller;
 
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.category.request.CategoryCreationRequest;
 import com.example.library_management_backend.dto.category.request.CategoryGetAllRequest;
 import com.example.library_management_backend.dto.category.request.CategoryUpdateRequest;

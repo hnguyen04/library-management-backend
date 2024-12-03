@@ -1,8 +1,8 @@
 package com.example.library_management_backend.exception;
 
-import java.util.Map;import java.util.Objects;
+import java.util.Map;
 
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

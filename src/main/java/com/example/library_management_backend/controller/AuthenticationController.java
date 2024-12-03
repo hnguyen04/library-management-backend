@@ -1,6 +1,6 @@
 package com.example.library_management_backend.controller;
 
-import com.example.library_management_backend.dto.ApiResponse;
+import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.authen.request.AuthenticationRequest;
 import com.example.library_management_backend.dto.authen.request.IntrospectRequest;
 import com.example.library_management_backend.dto.authen.request.LogoutRequest;

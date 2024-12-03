@@ -1,6 +1,6 @@
 package com.example.library_management_backend.dto.category.request;
 
-import com.example.library_management_backend.dto.base.BaseGetAllRequest;
+import com.example.library_management_backend.dto.base.request.BaseGetAllRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
