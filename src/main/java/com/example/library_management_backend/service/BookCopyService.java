@@ -1,8 +1,11 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.constants.BookCopyStatusEnum;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyCreationRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyGetAllRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyUpdateRequest;
+import com.example.library_management_backend.dto.book_copy.response.BookCopyResponse;
 import com.example.library_management_backend.entity.BookCopy;
 import com.example.library_management_backend.exception.AppException;
 import com.example.library_management_backend.exception.ErrorCode;
@@ -29,12 +32,23 @@ public class BookCopyService {
         return bookCopyRepository.save(bookCopy);
     }
 
-    public List<BookCopy> getAllBookCopies(BookCopyGetAllRequest request) {
-        return bookCopyRepository.findAllByFilters(request.getBookTitle(), request.getStatus())
+    public BaseGetAllResponse<BookCopyResponse> getAllBookCopies(BookCopyGetAllRequest request) {
+        int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
+        int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null : request.getBookTitle();
+        BookCopyStatusEnum status = request.getStatus();
+
+        List<BookCopyResponse> bookCopyResponseList = bookCopyRepository.findAllByFilters(bookTitle, status)
                 .stream()
-                .skip(request.getSkipCount() != null ? request.getSkipCount() : 0)
-                .limit(request.getMaxResultCount() != null ? request.getMaxResultCount() : 10)
+                .skip(skipCount)
+                .limit(maxResultCount)
+                .map(bookCopyMapper::toBookCopyResponse)
                 .collect(Collectors.toList());
+
+        return BaseGetAllResponse.<BookCopyResponse>builder()
+                .data(bookCopyResponseList)
+                .totalRecords(bookCopyRepository.countByFilters(bookTitle, status))
+                .build();
     }
 
     public BookCopy updateBookCopy(String id, BookCopyUpdateRequest request) {

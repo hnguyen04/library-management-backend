@@ -20,4 +20,15 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
                                 @Param("publisherId") Integer publisherId,
                                 @Param("authorId") Integer authorId,
                                 @Param("categoryId") Integer categoryId);
+
+    @Query("SELECT COUNT(b) " +
+            "FROM Book b " +
+            "WHERE (:title IS NULL OR b.title LIKE %:title%) " +
+            "AND (:publisherId IS NULL OR b.publisher.id = :publisherId) " +
+            "AND (:authorId IS NULL OR :authorId MEMBER OF b.authors) " +
+            "AND (:categoryId IS NULL OR :categoryId MEMBER OF b.categories)")
+    long countByFilters(@Param("title") String title,
+                        @Param("publisherId") Integer publisherId,
+                        @Param("authorId") Integer authorId,
+                        @Param("categoryId") Integer categoryId);
 }

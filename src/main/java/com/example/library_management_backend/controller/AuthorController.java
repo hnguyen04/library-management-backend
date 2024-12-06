@@ -5,6 +5,7 @@ import com.example.library_management_backend.dto.author.request.AuthorCreationR
 import com.example.library_management_backend.dto.author.request.AuthorGetAllRequest;
 import com.example.library_management_backend.dto.author.request.AuthorUpdateRequest;
 import com.example.library_management_backend.dto.author.response.AuthorResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.service.AuthorService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +31,18 @@ public class AuthorController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<AuthorResponse>> getAllAuthors(
+    ApiResponse<BaseGetAllResponse<AuthorResponse>> getAllAuthors(
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount,
             @RequestParam(value = "name", required = false) String name) {
 
-        AuthorGetAllRequest request = new AuthorGetAllRequest();
+        AuthorGetAllRequest request = AuthorGetAllRequest.builder()
+                .name(name)
+                .build();
         request.setSkipCount(skipCount);
         request.setMaxResultCount(maxResultCount);
-        request.setName(name);
-        return ApiResponse.<List<AuthorResponse>>builder()
+
+        return ApiResponse.<BaseGetAllResponse<AuthorResponse>>builder()
                 .result(authorService.getAllAuthors(request))
                 .build();
     }

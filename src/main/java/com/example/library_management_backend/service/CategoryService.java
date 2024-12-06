@@ -1,5 +1,6 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.category.request.CategoryCreationRequest;
 import com.example.library_management_backend.dto.category.request.CategoryGetAllRequest;
 import com.example.library_management_backend.dto.category.request.CategoryUpdateRequest;
@@ -36,17 +37,22 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(category);
     }
 
-    public List<CategoryResponse> getAllCategories(CategoryGetAllRequest request) {
+    public BaseGetAllResponse<CategoryResponse> getAllCategories(CategoryGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
 
-        return categoryRepository.findAllByFilters(name)
+        List<CategoryResponse> categoryResponseList = categoryRepository.findAllByFilters(name)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
                 .map(categoryMapper::toCategoryResponse)
                 .collect(Collectors.toList());
+
+        return BaseGetAllResponse.<CategoryResponse>builder()
+                .data(categoryResponseList)
+                .totalRecords(categoryRepository.countByFilters(name))
+                .build();
     }
 
     public CategoryResponse updateCategory(int id, CategoryUpdateRequest request) {

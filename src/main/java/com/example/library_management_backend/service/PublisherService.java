@@ -1,5 +1,6 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.publisher.request.PublisherCreationRequest;
 import com.example.library_management_backend.dto.publisher.request.PublisherGetAllRequest;
 import com.example.library_management_backend.dto.publisher.request.PublisherUpdateRequest;
@@ -36,18 +37,24 @@ public class PublisherService {
         return publisherMapper.toPublisherResponse(publisher);
     }
 
-    public List<PublisherResponse> getAllPublishers(PublisherGetAllRequest request) {
+    public BaseGetAllResponse<PublisherResponse> getAllPublishers(PublisherGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
 
-        return publisherRepository.findAllByFilters(name)
+        List<PublisherResponse> publisherResponseList = publisherRepository.findAllByFilters(name)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
                 .map(publisherMapper::toPublisherResponse)
                 .collect(Collectors.toList());
+
+        return BaseGetAllResponse.<PublisherResponse>builder()
+                .data(publisherResponseList)
+                .totalRecords(publisherRepository.countByFilters(name))
+                .build();
     }
+
     public PublisherResponse updatePublisher(int id, PublisherUpdateRequest request) {
         Publisher publisher = publisherRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new AppException(ErrorCode.PUBLISHER_NOT_EXISTED));
