@@ -55,8 +55,8 @@ public class CategoryService {
                 .build();
     }
 
-    public CategoryResponse updateCategory(int id, CategoryUpdateRequest request) {
-        Category category = categoryRepository.findById(String.valueOf(id))
+    public CategoryResponse updateCategory(CategoryUpdateRequest request) {
+        Category category = categoryRepository.findById(String.valueOf(request.getId()))
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
         categoryMapper.updateCategory(category, request);
         category = categoryRepository.save(category);

@@ -11,6 +11,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookCopyUpdateRequest {
+    @NotNull(message = "ID is mandatory")
+    String id;
+
     @NotNull(message = "Status is mandatory")
     BookCopyStatusEnum status;
 }

@@ -68,9 +68,9 @@ public class BookController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<BookResponse> updateBook(@RequestParam int id, @RequestBody BookUpdateRequest request) {
+    ApiResponse<BookResponse> updateBook(@RequestBody BookUpdateRequest request) {
         return ApiResponse.<BookResponse>builder()
-                .result(bookService.updateBook(id, request))
+                .result(bookService.updateBook(request))
                 .build();
     }
 }

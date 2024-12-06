@@ -89,8 +89,8 @@ public class BookService {
                 .build();
     }
 
-    public BookResponse updateBook(int id, BookUpdateRequest request) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+    public BookResponse updateBook(BookUpdateRequest request) {
+        Book book = bookRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
         bookMapper.updateBook(book, request);
         if (request.getPublisherId() != 0) {
             book.setPublisher(publisherRepository.findById(String.valueOf(request.getPublisherId()))

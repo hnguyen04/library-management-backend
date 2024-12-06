@@ -65,7 +65,7 @@ public class AuthorController {
     @PutMapping("/Update")
     ApiResponse<AuthorResponse> updateAuthor(@RequestParam int id, @RequestBody AuthorUpdateRequest request) {
         return ApiResponse.<AuthorResponse>builder().
-                result(authorService.updateAuthor(id, request)).
+                result(authorService.updateAuthor(request)).
                 build();
     }
 }

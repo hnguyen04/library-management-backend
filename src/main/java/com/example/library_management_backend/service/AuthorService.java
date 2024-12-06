@@ -57,11 +57,12 @@ public class AuthorService {
                 .build();
     }
 
-    public AuthorResponse updateAuthor(int id, AuthorUpdateRequest request) {
-        Author author = authorRepository.findById(String.valueOf(id))
+    public AuthorResponse updateAuthor(AuthorUpdateRequest request) {
+        Author author = authorRepository.findById(String.valueOf(request.getId()))
                 .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXISTED));
         authorMapper.updateAuthor(author, request);
         author = authorRepository.save(author);
+
         return authorMapper.toAuthorResponse(author);
     }
 

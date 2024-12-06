@@ -56,10 +56,9 @@ public class BookCopyController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<BookCopyResponse> updateBookCopy(@RequestParam String id, @RequestBody BookCopyUpdateRequest request) {
-        BookCopy bookCopy = bookCopyService.updateBookCopy(id, request);
+    ApiResponse<BookCopyResponse> updateBookCopy(@RequestBody BookCopyUpdateRequest request) {
         return ApiResponse.<BookCopyResponse>builder()
-                .result(bookCopyMapper.toBookCopyResponse(bookCopy))
+                .result(bookCopyService.updateBookCopy(request))
                 .build();
     }
 

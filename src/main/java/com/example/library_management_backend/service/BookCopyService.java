@@ -51,11 +51,12 @@ public class BookCopyService {
                 .build();
     }
 
-    public BookCopy updateBookCopy(String id, BookCopyUpdateRequest request) {
-        BookCopy bookCopy = bookCopyRepository.findById(id)
+    public BookCopyResponse updateBookCopy(BookCopyUpdateRequest request) {
+        BookCopy bookCopy = bookCopyRepository.findById(request.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_COPY_NOT_EXISTED));
         bookCopyMapper.updateBookCopy(bookCopy, request);
-        return bookCopyRepository.save(bookCopy);
+        bookCopy = bookCopyRepository.save(bookCopy);
+        return bookCopyMapper.toBookCopyResponse(bookCopy);
     }
 
     public void deleteBookCopy(String id) {

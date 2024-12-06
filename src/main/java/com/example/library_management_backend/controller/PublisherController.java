@@ -62,9 +62,9 @@ public class PublisherController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<PublisherResponse> updatePublisher(@RequestParam int id, @RequestBody PublisherUpdateRequest request) {
-        return ApiResponse.<PublisherResponse>builder().
-                result(publisherService.updatePublisher(id, request)).
-                build();
+    ApiResponse<PublisherResponse> updatePublisher(@RequestBody PublisherUpdateRequest request) {
+        return ApiResponse.<PublisherResponse>builder()
+                .result(publisherService.updatePublisher(request))
+                .build();
     }
 }
