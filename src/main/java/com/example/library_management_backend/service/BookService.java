@@ -1,5 +1,6 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book.request.BookCreationRequest;
 import com.example.library_management_backend.dto.book.request.BookGetAllRequest;
 import com.example.library_management_backend.dto.book.request.BookUpdateRequest;
@@ -67,7 +68,7 @@ public class BookService {
         return bookResponse;
     }
 
-    public List<BookResponse> getAllBooks(BookGetAllRequest request) {
+    public BaseGetAllResponse<BookResponse> getAllBooks(BookGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String title = (request.getTitle() == null || request.getTitle().isEmpty()) ? null : request.getTitle();
@@ -75,16 +76,21 @@ public class BookService {
         Integer authorId = (request.getAuthorId() == null || request.getAuthorId() == 0) ? null : request.getAuthorId();
         Integer categoryId = (request.getCategoryId() == null || request.getCategoryId() == 0) ? null : request.getCategoryId();
 
-        return bookRepository.findAllByFilters(title, publisherId, authorId, categoryId)
+        List<BookResponse> bookResponseList = bookRepository.findAllByFilters(title, publisherId, authorId, categoryId)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
                 .map(bookMapper::toBookResponse)
                 .collect(Collectors.toList());
+
+        return BaseGetAllResponse.<BookResponse>builder()
+                .data(bookResponseList)
+                .totalRecords(bookRepository.countByFilters(title, publisherId, authorId, categoryId))
+                .build();
     }
 
-    public BookResponse updateBook(int id, BookUpdateRequest request) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+    public BookResponse updateBook(BookUpdateRequest request) {
+        Book book = bookRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
         bookMapper.updateBook(book, request);
         if (request.getPublisherId() != 0) {
             book.setPublisher(publisherRepository.findById(String.valueOf(request.getPublisherId()))

@@ -13,6 +13,8 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookUpdateRequest {
+    int id;
+
     @NotBlank(message = "Title is mandatory")
     String title;
 

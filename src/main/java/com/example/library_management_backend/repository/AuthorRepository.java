@@ -11,4 +11,9 @@ import java.util.List;
 public interface AuthorRepository extends JpaRepository<Author, String> {
     @Query("SELECT c FROM Author c WHERE (:name IS NULL OR c.name LIKE %:name%)")
     List<Author> findAllByFilters(@Param("name") String name);
+
+    @Query("SELECT COUNT(a) " +
+            "FROM Author a " +
+            "WHERE (:name IS NULL OR a.name LIKE %:name%)")
+    long countByFilters(@Param("name") String name);
 }

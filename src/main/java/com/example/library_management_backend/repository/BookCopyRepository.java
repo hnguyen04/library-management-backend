@@ -15,4 +15,11 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, String> {
             "AND (:status IS NULL OR bc.status = :status)")
     List<BookCopy> findAllByFilters(@Param("bookTitle") String bookTitle,
                                     @Param("status") BookCopyStatusEnum status);
+
+    @Query("SELECT COUNT(bc) " +
+            "FROM BookCopy bc " +
+            "WHERE (:bookTitle IS NULL OR bc.book.title LIKE %:bookTitle%) " +
+            "AND (:status IS NULL OR bc.status = :status)")
+    long countByFilters(@Param("bookTitle") String bookTitle,
+                        @Param("status") BookCopyStatusEnum status);
 }

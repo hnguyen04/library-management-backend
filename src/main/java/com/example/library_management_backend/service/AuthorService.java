@@ -4,6 +4,7 @@ import com.example.library_management_backend.dto.author.request.AuthorCreationR
 import com.example.library_management_backend.dto.author.request.AuthorGetAllRequest;
 import com.example.library_management_backend.dto.author.request.AuthorUpdateRequest;
 import com.example.library_management_backend.dto.author.response.AuthorResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.entity.Author;
 import com.example.library_management_backend.exception.AppException;
 import com.example.library_management_backend.exception.ErrorCode;
@@ -36,24 +37,32 @@ public class AuthorService {
         return authorMapper.toAuthorResponse(author);
     }
 
-    public List<AuthorResponse> getAllAuthors(AuthorGetAllRequest request) {
+    public BaseGetAllResponse<AuthorResponse> getAllAuthors(AuthorGetAllRequest request) {
+        log.info("in getAllAuthors function");
+
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
         String name = (request.getName() == null || request.getName().isEmpty()) ? null : request.getName();
 
-        return authorRepository.findAllByFilters(name)
+        List<AuthorResponse> authorResponseList = authorRepository.findAllByFilters(name)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
                 .map(authorMapper::toAuthorResponse)
                 .collect(Collectors.toList());
+
+        return BaseGetAllResponse.<AuthorResponse>builder()
+                .data(authorResponseList)
+                .totalRecords(authorRepository.countByFilters(name))
+                .build();
     }
 
-    public AuthorResponse updateAuthor(int id, AuthorUpdateRequest request) {
-        Author author = authorRepository.findById(String.valueOf(id))
+    public AuthorResponse updateAuthor(AuthorUpdateRequest request) {
+        Author author = authorRepository.findById(String.valueOf(request.getId()))
                 .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXISTED));
         authorMapper.updateAuthor(author, request);
         author = authorRepository.save(author);
+
         return authorMapper.toAuthorResponse(author);
     }
 

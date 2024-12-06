@@ -1,6 +1,7 @@
 package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.dto.base.response.ApiResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book.request.BookCreationRequest;
 import com.example.library_management_backend.dto.book.request.BookGetAllRequest;
 import com.example.library_management_backend.dto.book.request.BookUpdateRequest;
@@ -30,7 +31,7 @@ public class BookController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<BookResponse>> getAllBooks(
+    ApiResponse<BaseGetAllResponse<BookResponse>> getAllBooks(
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "publisherId", required = false) Integer publisherId,
             @RequestParam(value = "authorId", required = false) Integer authorId,
@@ -45,7 +46,8 @@ public class BookController {
         request.setCategoryId(categoryId);
         request.setSkipCount(skipCount);
         request.setMaxResultCount(maxResultCount);
-        return ApiResponse.<List<BookResponse>>builder()
+
+        return ApiResponse.<BaseGetAllResponse<BookResponse>>builder()
                 .result(bookService.getAllBooks(request))
                 .build();
     }
@@ -66,9 +68,9 @@ public class BookController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<BookResponse> updateBook(@RequestParam int id, @RequestBody BookUpdateRequest request) {
+    ApiResponse<BookResponse> updateBook(@RequestBody BookUpdateRequest request) {
         return ApiResponse.<BookResponse>builder()
-                .result(bookService.updateBook(id, request))
+                .result(bookService.updateBook(request))
                 .build();
     }
 }

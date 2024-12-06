@@ -1,6 +1,7 @@
 package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.dto.base.response.ApiResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.publisher.request.PublisherCreationRequest;
 import com.example.library_management_backend.dto.publisher.request.PublisherGetAllRequest;
 import com.example.library_management_backend.dto.publisher.request.PublisherUpdateRequest;
@@ -30,7 +31,7 @@ public class PublisherController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<PublisherResponse>> getAllPublishers(
+    ApiResponse<BaseGetAllResponse<PublisherResponse>> getAllPublishers(
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount,
             @RequestParam(value = "name", required = false) String name) {
@@ -39,7 +40,8 @@ public class PublisherController {
         request.setSkipCount(skipCount);
         request.setMaxResultCount(maxResultCount);
         request.setName(name);
-        return ApiResponse.<List<PublisherResponse>>builder()
+
+        return ApiResponse.<BaseGetAllResponse<PublisherResponse>>builder()
                 .result(publisherService.getAllPublishers(request))
                 .build();
     }
@@ -60,9 +62,9 @@ public class PublisherController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<PublisherResponse> updatePublisher(@RequestParam int id, @RequestBody PublisherUpdateRequest request) {
-        return ApiResponse.<PublisherResponse>builder().
-                result(publisherService.updatePublisher(id, request)).
-                build();
+    ApiResponse<PublisherResponse> updatePublisher(@RequestBody PublisherUpdateRequest request) {
+        return ApiResponse.<PublisherResponse>builder()
+                .result(publisherService.updatePublisher(request))
+                .build();
     }
 }

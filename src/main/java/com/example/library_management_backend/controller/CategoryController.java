@@ -1,6 +1,7 @@
 package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.dto.base.response.ApiResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.category.request.CategoryCreationRequest;
 import com.example.library_management_backend.dto.category.request.CategoryGetAllRequest;
 import com.example.library_management_backend.dto.category.request.CategoryUpdateRequest;
@@ -30,7 +31,7 @@ public class CategoryController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<CategoryResponse>> getAllCategories(
+    ApiResponse<BaseGetAllResponse<CategoryResponse>> getAllCategories(
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount,
             @RequestParam(value = "name", required = false) String name) {
@@ -39,7 +40,8 @@ public class CategoryController {
         request.setSkipCount(skipCount);
         request.setMaxResultCount(maxResultCount);
         request.setName(name);
-        return ApiResponse.<List<CategoryResponse>>builder()
+
+        return ApiResponse.<BaseGetAllResponse<CategoryResponse>>builder()
                 .result(categoryService.getAllCategories(request))
                 .build();
     }
@@ -62,7 +64,7 @@ public class CategoryController {
     @PutMapping("/Update")
     ApiResponse<CategoryResponse> updateCategory(@RequestParam int id, @RequestBody CategoryUpdateRequest request) {
         return ApiResponse.<CategoryResponse>builder().
-                result(categoryService.updateCategory(id, request)).
+                result(categoryService.updateCategory(request)).
                 build();
     }
 }
