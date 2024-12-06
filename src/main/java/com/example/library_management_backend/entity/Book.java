@@ -22,9 +22,6 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<BookCopy> bookCopies;
-
     @Column(unique = true, nullable = false)
     String title;
     @Column(nullable = false)

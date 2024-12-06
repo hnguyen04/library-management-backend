@@ -2,6 +2,7 @@ package com.example.library_management_backend.controller;
 
 import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.dto.base.response.ApiResponse;
+import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyCreationRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyGetAllRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyUpdateRequest;
@@ -36,7 +37,7 @@ public class BookCopyController {
     }
 
     @GetMapping("/GetAll")
-    ApiResponse<List<BookCopyResponse>> getAllBookCopies(
+    ApiResponse<BaseGetAllResponse<BookCopyResponse>> getAllBookCopies(
             @RequestParam(value = "bookTitle", required = false) String bookTitle,
             @RequestParam(value = "status", required = false) BookCopyStatusEnum status,
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
@@ -49,21 +50,15 @@ public class BookCopyController {
                 .maxResultCount(maxResultCount)
                 .build();
 
-        List<BookCopyResponse> responses = bookCopyService.getAllBookCopies(request)
-                .stream()
-                .map(bookCopyMapper::toBookCopyResponse)
-                .collect(Collectors.toList());
-
-        return ApiResponse.<List<BookCopyResponse>>builder()
-                .result(responses)
+        return ApiResponse.<BaseGetAllResponse<BookCopyResponse>>builder()
+                .result(bookCopyService.getAllBookCopies(request))
                 .build();
     }
 
     @PutMapping("/Update")
-    ApiResponse<BookCopyResponse> updateBookCopy(@RequestParam String id, @RequestBody BookCopyUpdateRequest request) {
-        BookCopy bookCopy = bookCopyService.updateBookCopy(id, request);
+    ApiResponse<BookCopyResponse> updateBookCopy(@RequestBody BookCopyUpdateRequest request) {
         return ApiResponse.<BookCopyResponse>builder()
-                .result(bookCopyMapper.toBookCopyResponse(bookCopy))
+                .result(bookCopyService.updateBookCopy(request))
                 .build();
     }
 

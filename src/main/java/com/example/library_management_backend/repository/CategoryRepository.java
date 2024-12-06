@@ -11,4 +11,9 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, String> {
     @Query("SELECT c FROM Category c WHERE (:name IS NULL OR c.name LIKE %:name%)")
     List<Category> findAllByFilters(@Param("name") String name);
+
+    @Query("SELECT COUNT(c) " +
+            "FROM Category c " +
+            "WHERE (:name IS NULL OR c.name LIKE %:name%)")
+    long countByFilters(@Param("name") String name);
 }

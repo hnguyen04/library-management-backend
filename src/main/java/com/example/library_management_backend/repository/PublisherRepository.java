@@ -9,4 +9,9 @@ import java.util.List;
 public interface PublisherRepository extends JpaRepository<Publisher, String> {
     @Query("SELECT p FROM Publisher p WHERE (:name IS NULL OR p.name LIKE %:name%)")
     List<Publisher> findAllByFilters(@Param("name") String name);
+
+    @Query("SELECT COUNT(p) " +
+            "FROM Publisher p " +
+            "WHERE (:name IS NULL OR p.name LIKE %:name%)")
+    long countByFilters(@Param("name") String name);
 }

@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryUpdateRequest {
+    int id;
     @NotBlank(message = "Name is mandatory")
     String name;
 }
