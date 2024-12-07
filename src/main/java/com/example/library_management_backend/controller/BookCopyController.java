@@ -16,9 +16,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/book-copies")
 @RequiredArgsConstructor
@@ -52,6 +49,13 @@ public class BookCopyController {
 
         return ApiResponse.<BaseGetAllResponse<BookCopyResponse>>builder()
                 .result(bookCopyService.getAllBookCopies(request))
+                .build();
+    }
+
+    @GetMapping("/GetById")
+    public ApiResponse<BookCopyResponse> getBookCopyById(@RequestParam String id) {
+        return ApiResponse.<BookCopyResponse>builder()
+                .result(bookCopyService.getBookCopyById(id))
                 .build();
     }
 
