@@ -27,6 +27,8 @@ public class Fine {
     @ManyToOne(cascade = CascadeType.ALL)
     BookLoan bookLoan;
 
+    double amount;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     Date CreatedAt;
