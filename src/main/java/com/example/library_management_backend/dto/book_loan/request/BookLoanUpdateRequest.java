@@ -13,13 +13,14 @@ import java.util.Date;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookLoanUpdateRequest {
-    @NotNull (message = "Book Loan ID is required")
+    @NotNull(message = "Book Loan ID is required")
     String id;
     String bookCopyId;
     String userId;
     Date loanDate;
     int numberOfDaysLoan;
     Date returnDate;
-    @NotNull (message = "Status is required")
+    Date actualReturnDate;
+    @NotNull(message = "Status is required")
     BookLoanStatusEnum status;
 }

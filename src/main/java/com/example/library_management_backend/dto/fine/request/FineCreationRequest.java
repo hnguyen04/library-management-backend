@@ -11,5 +11,4 @@ import lombok.experimental.FieldDefaults;
 public class FineCreationRequest {
     String userId;
     String bookLoanId;
-    double amount;
 }

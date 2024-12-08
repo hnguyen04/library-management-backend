@@ -55,17 +55,12 @@ public class BookLoanService {
         BookCopy bookCopy = bookCopyRepository.findById(request.getBookCopyId())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_COPY_NOT_EXISTED));
 
-        User user = userRepository.findById(request.getUserId()) // Fetch the user
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         BookLoan bookLoan = bookLoanMapper.toBookLoan(request);
         bookLoan.setBookCopy(bookCopy);
-        bookLoan.setUser(user); // Set the user
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(request.getLoanDate());
-        calendar.add(Calendar.DAY_OF_YEAR, request.getNumberOfDaysLoan());
-        bookLoan.setReturnDate(calendar.getTime());
+        bookLoan.setUser(user);
 
         bookLoan = bookLoanRepository.save(bookLoan);
         return bookLoanMapper.toBookLoanResponse(bookLoan);
@@ -83,10 +78,9 @@ public class BookLoanService {
 
         bookLoanMapper.updateBookLoan(bookLoan, request);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(request.getLoanDate());
-        calendar.add(Calendar.DAY_OF_YEAR, request.getNumberOfDaysLoan());
-        bookLoan.setReturnDate(calendar.getTime());
+        bookLoan.setLoanDate(request.getLoanDate());
+        bookLoan.setReturnDate(request.getReturnDate());
+        bookLoan.setActualReturnDate(request.getActualReturnDate());
 
         bookLoan = bookLoanRepository.save(bookLoan);
         return bookLoanMapper.toBookLoanResponse(bookLoan);

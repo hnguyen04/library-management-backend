@@ -1,3 +1,4 @@
+// src/main/java/com/example/library_management_backend/mapper/FineMapper.java
 package com.example.library_management_backend.mapper;
 
 import com.example.library_management_backend.dto.fine.request.FineCreationRequest;
@@ -14,12 +15,10 @@ public interface FineMapper {
     @Mapping(target = "bookLoan.id", source = "bookLoanId")
     Fine toFine(FineCreationRequest request);
 
+    @Mapping(target = "amount", source = "amount")
     void updateFine(@MappingTarget Fine fine, FineUpdateRequest request);
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "bookLoan.id", target = "bookLoanId")
-    @Mapping(source = "bookLoan.bookCopy.book.price", target = "bookPrice")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
     FineResponse toFineResponse(Fine fine);
 }

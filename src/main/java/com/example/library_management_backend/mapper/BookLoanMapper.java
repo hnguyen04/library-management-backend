@@ -21,6 +21,7 @@ public interface BookLoanMapper {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "loanDate", target = "loanDate")
     @Mapping(source = "returnDate", target = "returnDate")
+    @Mapping(source = "actualReturnDate", target = "actualReturnDate")
     @Mapping(source = "status", target = "status")
     BookLoanResponse toBookLoanResponse(BookLoan bookLoan);
 }

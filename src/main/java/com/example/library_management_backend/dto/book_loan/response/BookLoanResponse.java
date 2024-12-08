@@ -17,5 +17,6 @@ public class BookLoanResponse {
     String userId;
     Date loanDate;
     Date returnDate;
+    Date actualReturnDate;
     BookLoanStatusEnum status;
 }

@@ -19,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,10 +57,28 @@ public class FineService {
         BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
 
+        double amount;
+        switch (bookLoan.getStatus()) {
+            case RETURNED:
+                if (bookLoan.getActualReturnDate() != null && bookLoan.getActualReturnDate().after(bookLoan.getReturnDate())) {
+                    long diffInMillies = Math.abs(bookLoan.getActualReturnDate().getTime() - bookLoan.getReturnDate().getTime());
+                    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+                    amount = diff * 0.01 * bookLoan.getBookCopy().getBook().getPrice();
+                } else {
+                    throw new AppException(ErrorCode.INVALID_BOOK_LOAN_STATUS);
+                }
+                break;
+            case NONRETURNABLE:
+                amount = bookLoan.getBookCopy().getBook().getPrice();
+                break;
+            default:
+                throw new AppException(ErrorCode.INVALID_BOOK_LOAN_STATUS);
+        }
+
         Fine fine = fineMapper.toFine(request);
         fine.setUser(user);
         fine.setBookLoan(bookLoan);
-        fine.setAmount(bookLoan.getBookCopy().getBook().getPrice()); // Set amount to 100% of book price
+        fine.setAmount(amount);
 
         fine = fineRepository.save(fine);
         return fineMapper.toFineResponse(fine);
