@@ -35,6 +35,10 @@ public class BookLoan {
     @Temporal(TemporalType.TIMESTAMP)
     Date returnDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = true)
+    Date actualReturnDate;
+
     @Enumerated(EnumType.STRING)
     BookLoanStatusEnum status;
 
