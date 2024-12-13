@@ -1,9 +1,11 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.constants.BookLoanStatusEnum;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book_loan.request.BookLoanCreationRequest;
 import com.example.library_management_backend.dto.book_loan.request.BookLoanGetAllRequest;
+import com.example.library_management_backend.dto.book_loan.request.BookLoanRequestBorrowRequest;
 import com.example.library_management_backend.dto.book_loan.request.BookLoanUpdateRequest;
 import com.example.library_management_backend.dto.book_loan.response.BookLoanResponse;
 import com.example.library_management_backend.entity.BookCopy;
@@ -20,6 +22,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,5 +111,35 @@ public class BookLoanService {
         bookLoan.setUser(null);
         bookLoanRepository.save(bookLoan);
         bookLoanRepository.deleteById(id);
+    }
+
+    public BookLoanResponse requestBorrow(BookLoanRequestBorrowRequest request) {
+        BookCopy bookCopy = bookCopyRepository.findFirstByBookIdAndStatus(request.getBookId(), BookCopyStatusEnum.AVAILABLE)
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_COPY_NOT_AVAILABLE));
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (bookCopy.getStatus() == BookCopyStatusEnum.AVAILABLE) {
+            bookCopy.setStatus(BookCopyStatusEnum.UNAVAILABLE);
+            bookCopyRepository.save(bookCopy);
+        }
+        bookCopyRepository.save(bookCopy);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(request.getLoanDate());
+        calendar.add(Calendar.DAY_OF_YEAR, request.getNumberOfDaysLoan());
+        Date returnDate = calendar.getTime();
+
+        BookLoan bookLoan = BookLoan.builder()
+                .bookCopy(bookCopy)
+                .user(user)
+                .loanDate(request.getLoanDate())
+                .returnDate(returnDate)
+                .status(BookLoanStatusEnum.REQUEST_BORROWING)
+                .build();
+
+        bookLoan = bookLoanRepository.save(bookLoan);
+        return bookLoanMapper.toBookLoanResponse(bookLoan);
     }
 }
