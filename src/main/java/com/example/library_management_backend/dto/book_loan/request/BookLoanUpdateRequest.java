@@ -18,7 +18,6 @@ public class BookLoanUpdateRequest {
     String bookCopyId;
     String userId;
     Date loanDate;
-    int numberOfDaysLoan;
     Date returnDate;
     Date actualReturnDate;
     @NotNull(message = "Status is required")

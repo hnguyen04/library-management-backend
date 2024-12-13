@@ -17,7 +17,6 @@ public class BookLoanCreationRequest {
     String userId;
     Date loanDate;
     int numberOfDaysLoan;
-    Date returnDate;
     @NotNull(message = "Status is required")
     BookLoanStatusEnum status;
 }

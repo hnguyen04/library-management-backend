@@ -62,6 +62,15 @@ public class BookLoanService {
         bookLoan.setBookCopy(bookCopy);
         bookLoan.setUser(user);
 
+        if (request.getLoanDate() != null && request.getNumberOfDaysLoan() > 0) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(request.getLoanDate());
+            calendar.add(Calendar.DAY_OF_YEAR, request.getNumberOfDaysLoan());
+            bookLoan.setReturnDate(calendar.getTime());
+        } else {
+            throw new AppException(ErrorCode.INVALID_NUMBER_OF_DAYS_LOAN);
+        }
+
         bookLoan = bookLoanRepository.save(bookLoan);
         return bookLoanMapper.toBookLoanResponse(bookLoan);
     }
