@@ -62,7 +62,7 @@ public class CategoryController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<CategoryResponse> updateCategory(@RequestParam int id, @RequestBody CategoryUpdateRequest request) {
+    ApiResponse<CategoryResponse> updateCategory(@RequestBody CategoryUpdateRequest request) {
         return ApiResponse.<CategoryResponse>builder().
                 result(categoryService.updateCategory(request)).
                 build();

@@ -1,18 +1,25 @@
 package com.example.library_management_backend.controller;
 
+import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.constants.BookLoanStatusEnum;
 import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book_loan.request.BookLoanCreationRequest;
 import com.example.library_management_backend.dto.book_loan.request.BookLoanGetAllRequest;
+import com.example.library_management_backend.dto.book_loan.request.BookLoanRequestBorrowRequest;
 import com.example.library_management_backend.dto.book_loan.request.BookLoanUpdateRequest;
 import com.example.library_management_backend.dto.book_loan.response.BookLoanResponse;
+import com.example.library_management_backend.entity.BookCopy;
 import com.example.library_management_backend.service.BookLoanService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/book-loans")
@@ -68,5 +75,11 @@ public class BookLoanController {
         return ApiResponse.<BookLoanResponse>builder()
                 .result(bookLoanService.updateBookLoan(request))
                 .build();
+    }
+
+    @PostMapping("/request-borrow")
+    public ResponseEntity<BookLoanResponse> requestBorrow(@Valid @RequestBody BookLoanRequestBorrowRequest request) {
+        BookLoanResponse response = bookLoanService.requestBorrow(request);
+        return ResponseEntity.ok(response);
     }
 }

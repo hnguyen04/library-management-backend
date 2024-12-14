@@ -17,6 +17,7 @@ public interface BookLoanMapper {
     @Mapping(target = "status", source = "status")
     void updateBookLoan(@MappingTarget BookLoan bookLoan, BookLoanUpdateRequest request);
 
+    @Mapping(source = "bookCopy.book.title", target = "bookTitle")
     @Mapping(source = "bookCopy.id", target = "bookCopyId")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "loanDate", target = "loanDate")

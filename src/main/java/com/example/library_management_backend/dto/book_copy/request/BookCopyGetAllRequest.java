@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookCopyGetAllRequest {
+    String bookId;
     String bookTitle;
     BookCopyStatusEnum status;
     Integer skipCount;

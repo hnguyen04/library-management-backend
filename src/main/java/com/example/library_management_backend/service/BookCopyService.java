@@ -35,10 +35,11 @@ public class BookCopyService {
     public BaseGetAllResponse<BookCopyResponse> getAllBookCopies(BookCopyGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        String bookId = (request.getBookId() == null || request.getBookId().isEmpty()) ? null : request.getBookId();
         String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null : request.getBookTitle();
         BookCopyStatusEnum status = request.getStatus();
 
-        List<BookCopyResponse> bookCopyResponseList = bookCopyRepository.findAllByFilters(bookTitle, status)
+        List<BookCopyResponse> bookCopyResponseList = bookCopyRepository.findAllByFilters(bookId, bookTitle, status)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
@@ -47,7 +48,7 @@ public class BookCopyService {
 
         return BaseGetAllResponse.<BookCopyResponse>builder()
                 .data(bookCopyResponseList)
-                .totalRecords(bookCopyRepository.countByFilters(bookTitle, status))
+                .totalRecords(bookCopyRepository.countByFilters(bookId, bookTitle, status))
                 .build();
     }
 

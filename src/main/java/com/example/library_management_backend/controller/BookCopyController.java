@@ -35,12 +35,14 @@ public class BookCopyController {
 
     @GetMapping("/GetAll")
     ApiResponse<BaseGetAllResponse<BookCopyResponse>> getAllBookCopies(
+            @RequestParam(value = "bookId", required = false) String bookId,
             @RequestParam(value = "bookTitle", required = false) String bookTitle,
             @RequestParam(value = "status", required = false) BookCopyStatusEnum status,
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount) {
 
         BookCopyGetAllRequest request = BookCopyGetAllRequest.builder()
+                .bookId(bookId)
                 .bookTitle(bookTitle)
                 .status(status)
                 .skipCount(skipCount)
