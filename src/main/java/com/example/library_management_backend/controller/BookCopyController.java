@@ -3,6 +3,7 @@ package com.example.library_management_backend.controller;
 import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
+import com.example.library_management_backend.dto.book_copy.request.BookCopyCreateManyRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyCreationRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyGetAllRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyUpdateRequest;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/book-copies")
@@ -30,6 +33,13 @@ public class BookCopyController {
         BookCopy bookCopy = bookCopyService.createBookCopy(request);
         return ApiResponse.<BookCopyResponse>builder()
                 .result(bookCopyMapper.toBookCopyResponse(bookCopy))
+                .build();
+    }
+
+    @PostMapping("/CreateMany")
+    ApiResponse<List<BookCopyResponse>> createManyBookCopies(@RequestBody BookCopyCreateManyRequest request) {
+        return ApiResponse.<List<BookCopyResponse>>builder()
+                .result(bookCopyService.createManyBookCopies(request))
                 .build();
     }
 

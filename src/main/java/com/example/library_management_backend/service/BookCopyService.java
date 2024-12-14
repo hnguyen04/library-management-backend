@@ -2,10 +2,12 @@ package com.example.library_management_backend.service;
 
 import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
+import com.example.library_management_backend.dto.book_copy.request.BookCopyCreateManyRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyCreationRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyGetAllRequest;
 import com.example.library_management_backend.dto.book_copy.request.BookCopyUpdateRequest;
 import com.example.library_management_backend.dto.book_copy.response.BookCopyResponse;
+import com.example.library_management_backend.entity.Book;
 import com.example.library_management_backend.entity.BookCopy;
 import com.example.library_management_backend.exception.AppException;
 import com.example.library_management_backend.exception.ErrorCode;
@@ -15,6 +17,7 @@ import com.example.library_management_backend.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,28 @@ public class BookCopyService {
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED)));
         return bookCopyRepository.save(bookCopy);
     }
+
+    public List<BookCopyResponse> createManyBookCopies(BookCopyCreateManyRequest request) {
+        Book book = bookRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_EXISTED));
+
+        List<BookCopy> bookCopies = new ArrayList<>();
+
+        for (int i = 0; i < request.getNumber(); i++) {
+            BookCopy bookCopy = new BookCopy();
+            bookCopy.setBook(book); // Gắn Book từ DB
+            bookCopy.setStatus(BookCopyStatusEnum.AVAILABLE);
+            bookCopies.add(bookCopy);
+        }
+        // Lưu tất cả các bản ghi vào repository
+        List<BookCopy> savedBookCopies = bookCopyRepository.saveAll(bookCopies);
+
+        // Map saved BookCopy entities to BookCopyResponse objects
+        return savedBookCopies.stream()
+                .map(bookCopyMapper::toBookCopyResponse)
+                .collect(Collectors.toList());
+    }
+
 
     public BaseGetAllResponse<BookCopyResponse> getAllBookCopies(BookCopyGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
