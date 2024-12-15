@@ -77,9 +77,10 @@ public class BookLoanController {
     }
 
     @PostMapping("/RequestBorrow")
-    public ResponseEntity<BookLoanResponse> requestBorrow(@Valid @RequestBody BookLoanRequestBorrowRequest request) {
-        BookLoanResponse response = bookLoanService.requestBorrow(request);
-        return ResponseEntity.ok(response);
+    public ApiResponse<BookLoanResponse> requestBorrow(@Valid @RequestBody BookLoanRequestBorrowRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.requestBorrow(request))
+                .build();
     }
 
     @PostMapping("/SetBorrowed")
@@ -93,6 +94,20 @@ public class BookLoanController {
     public ApiResponse<BookLoanResponse> requestReturn(@RequestBody BookLoanRequestReturnRequest request) {
         return ApiResponse.<BookLoanResponse>builder()
                 .result(bookLoanService.requestReturn(request))
+                .build();
+    }
+
+    @PostMapping("/AcceptReturn")
+    public ApiResponse<BookLoanResponse> acceptReturn(@RequestBody BookLoanAcceptReturnRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.acceptReturn(request))
+                .build();
+    }
+
+    @PostMapping("/SetNonreturnable")
+    public ApiResponse<BookLoanResponse> setBookLoanNonreturnable(@RequestBody BookLoanSetNonreturnableRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.setBookLoanNonreturnable(request))
                 .build();
     }
 }

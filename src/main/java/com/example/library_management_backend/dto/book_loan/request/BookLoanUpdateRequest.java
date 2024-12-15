@@ -15,10 +15,7 @@ import java.util.Date;
 public class BookLoanUpdateRequest {
     @NotNull(message = "Book Loan ID is required")
     String id;
-    String bookCopyId;
     Date loanDate;
     Date returnDate;
     Date actualReturnDate;
-    @NotNull(message = "Status is required")
-    BookLoanStatusEnum status;
 }

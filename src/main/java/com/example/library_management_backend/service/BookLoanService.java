@@ -5,6 +5,7 @@ import com.example.library_management_backend.constants.BookLoanStatusEnum;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book_loan.request.*;
 import com.example.library_management_backend.dto.book_loan.response.BookLoanResponse;
+import com.example.library_management_backend.dto.fine.request.FineCreationRequest;
 import com.example.library_management_backend.entity.BookCopy;
 import com.example.library_management_backend.entity.BookLoan;
 import com.example.library_management_backend.entity.User;
@@ -31,6 +32,7 @@ public class BookLoanService {
     BookLoanRepository bookLoanRepository;
     UserRepository userRepository;
     BookLoanMapper bookLoanMapper;
+    FineService fineService;
 
     public BaseGetAllResponse<BookLoanResponse> getAllBookLoans(BookLoanGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
@@ -79,12 +81,6 @@ public class BookLoanService {
     public BookLoanResponse updateBookLoan(BookLoanUpdateRequest request) {
         BookLoan bookLoan = bookLoanRepository.findById(request.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
-
-        if (request.getBookCopyId() != null) {
-            BookCopy bookCopy = bookCopyRepository.findById(request.getBookCopyId())
-                    .orElseThrow(() -> new AppException(ErrorCode.BOOK_COPY_NOT_EXISTED));
-            bookLoan.setBookCopy(bookCopy);
-        }
 
         bookLoanMapper.updateBookLoan(bookLoan, request);
 
@@ -166,6 +162,42 @@ public class BookLoanService {
         bookLoan.setActualReturnDate(new Date());
         bookLoan = bookLoanRepository.save(bookLoan);
 
+        return bookLoanMapper.toBookLoanResponse(bookLoan);
+    }
+
+    public BookLoanResponse acceptReturn(BookLoanAcceptReturnRequest request) {
+        BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
+
+        Date actualReturnDate = new Date();
+        bookLoan.setActualReturnDate(actualReturnDate);
+        bookLoan.setStatus(BookLoanStatusEnum.RETURNED);
+
+        if (bookLoan.getReturnDate().before(actualReturnDate)) {
+            FineCreationRequest fineRequest = FineCreationRequest.builder()
+                    .userId(bookLoan.getUser().getId())
+                    .bookLoanId(bookLoan.getId())
+                    .build();
+            fineService.createFine(fineRequest);
+        }
+
+        bookLoan = bookLoanRepository.save(bookLoan);
+        return bookLoanMapper.toBookLoanResponse(bookLoan);
+    }
+
+    public BookLoanResponse setBookLoanNonreturnable(BookLoanSetNonreturnableRequest request) {
+        BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
+
+        bookLoan.setStatus(BookLoanStatusEnum.NONRETURNABLE);
+
+        FineCreationRequest fineRequest = FineCreationRequest.builder()
+                .userId(bookLoan.getUser().getId())
+                .bookLoanId(bookLoan.getId())
+                .build();
+        fineService.createFine(fineRequest);
+
+        bookLoan = bookLoanRepository.save(bookLoan);
         return bookLoanMapper.toBookLoanResponse(bookLoan);
     }
 }
