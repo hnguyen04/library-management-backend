@@ -40,12 +40,14 @@ public class BookLoanController {
     public ApiResponse<BaseGetAllResponse<BookLoanResponse>> getAllBookLoans(
             @RequestParam(value = "bookTitle", required = false) String bookTitle,
             @RequestParam(value = "status", required = false) BookLoanStatusEnum status,
+            @RequestParam(value = "userId", required = false) String userId,
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount) {
 
         BookLoanGetAllRequest request = BookLoanGetAllRequest.builder()
                 .bookTitle(bookTitle)
                 .status(status)
+                .userId(userId)
                 .skipCount(skipCount)
                 .maxResultCount(maxResultCount)
                 .build();

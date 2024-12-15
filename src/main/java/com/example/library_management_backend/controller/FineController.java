@@ -25,10 +25,12 @@ public class FineController {
 
     @GetMapping("/GetAll")
     public ApiResponse<BaseGetAllResponse<FineResponse>> getAllFines(
+            @RequestParam(value = "userId", required = false) String userId,
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount) {
 
         FineGetAllRequest request = FineGetAllRequest.builder()
+                .userId(userId)
                 .skipCount(skipCount)
                 .maxResultCount(maxResultCount)
                 .build();

@@ -11,15 +11,17 @@ import java.util.List;
 
 @Repository
 public interface BookLoanRepository extends JpaRepository<BookLoan, String> {
-    @Query("SELECT bl FROM BookLoan bl WHERE (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%) " +
+    @Query("SELECT bl FROM BookLoan bl WHERE (:userId IS NULL OR bl.user.id = :userId) " +
+            "AND (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%) " +
             "AND (:status IS NULL OR bl.status = :status)")
-    List<BookLoan> findAllByFilters(@Param("bookTitle") String bookTitle,
+    List<BookLoan> findAllByFilters(@Param("userId") String userId,
+                                    @Param("bookTitle") String bookTitle,
                                     @Param("status") BookLoanStatusEnum status);
 
-    @Query("SELECT COUNT(bl) " +
-            "FROM BookLoan bl " +
-            "WHERE (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%) " +
+    @Query("SELECT COUNT(bl) FROM BookLoan bl WHERE (:userId IS NULL OR bl.user.id = :userId) " +
+            "AND (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%) " +
             "AND (:status IS NULL OR bl.status = :status)")
-    long countByFilters(@Param("bookTitle") String bookTitle,
+    long countByFilters(@Param("userId") String userId,
+                        @Param("bookTitle") String bookTitle,
                         @Param("status") BookLoanStatusEnum status);
 }

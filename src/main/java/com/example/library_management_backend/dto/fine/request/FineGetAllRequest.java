@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FineGetAllRequest {
+    String userId;
     Integer skipCount;
     Integer maxResultCount;
 }

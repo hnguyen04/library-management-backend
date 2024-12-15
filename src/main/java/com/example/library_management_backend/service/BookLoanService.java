@@ -38,10 +38,11 @@ public class BookLoanService {
     public BaseGetAllResponse<BookLoanResponse> getAllBookLoans(BookLoanGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        String userId = (request.getUserId() == null || request.getUserId().isEmpty()) ? null : request.getUserId();
         String bookTitle = (request.getBookTitle() == null || request.getBookTitle().isEmpty()) ? null : request.getBookTitle();
         BookLoanStatusEnum status = request.getStatus();
 
-        List<BookLoanResponse> bookLoanResponseList = bookLoanRepository.findAllByFilters(bookTitle, status)
+        List<BookLoanResponse> bookLoanResponseList = bookLoanRepository.findAllByFilters(userId, bookTitle, status)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
@@ -50,7 +51,7 @@ public class BookLoanService {
 
         return BaseGetAllResponse.<BookLoanResponse>builder()
                 .data(bookLoanResponseList)
-                .totalRecords(bookLoanRepository.countByFilters(bookTitle, status))
+                .totalRecords(bookLoanRepository.countByFilters(userId, bookTitle, status))
                 .build();
     }
 
