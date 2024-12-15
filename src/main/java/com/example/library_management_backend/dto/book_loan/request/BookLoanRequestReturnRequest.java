@@ -12,6 +12,5 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookLoanRequestReturnRequest {
     String bookLoanId;
-    String userId;
     Date actualReturnDate;
 }

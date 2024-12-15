@@ -86,6 +86,8 @@ public class BookLoanService {
                     .status(BookRequestStatusEnum.PENDING)
                     .type(BookRequestTypeEnum.BORROWING)
                     .build();
+            bookRequest = bookRequestRepository.save(bookRequest);
+
             bookLoan.setCurrentBookRequestId(bookRequest.getId());
             bookLoan = bookLoanRepository.save(bookLoan);
         }
@@ -96,6 +98,8 @@ public class BookLoanService {
                     .status(BookRequestStatusEnum.PENDING)
                     .type(BookRequestTypeEnum.RETURNING)
                     .build();
+            bookRequest = bookRequestRepository.save(bookRequest);
+
             bookLoan.setCurrentBookRequestId(bookRequest.getId());
             bookLoan = bookLoanRepository.save(bookLoan);
         }
@@ -198,15 +202,8 @@ public class BookLoanService {
         BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
                 .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
 
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        if (!user.getId().equals(request.getUserId())) {
-            throw new AppException(ErrorCode.USER_NOT_AUTHORIZED);
-        }
-
         bookLoan.setStatus(BookLoanStatusEnum.REQUEST_RETURNING);
-        bookLoan.setActualReturnDate(new Date());
+        bookLoan.setActualReturnDate(request.getActualReturnDate() != null ? request.getActualReturnDate() : new Date());
         bookLoan = bookLoanRepository.save(bookLoan);
 
         BookRequest bookRequest = BookRequest.builder()

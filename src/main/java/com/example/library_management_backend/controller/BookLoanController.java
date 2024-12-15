@@ -83,41 +83,41 @@ public class BookLoanController {
                 .build();
     }
 
-    @PostMapping("/SetBorrowed")
+    @PutMapping("/SetBorrowed")
     public ApiResponse<BookLoanResponse> setBookLoanBorrowed(@RequestBody BookLoanSetBorrowedRequest request) {
         return ApiResponse.<BookLoanResponse>builder()
                 .result(bookLoanService.setBookLoanBorrowed(request))
                 .build();
     }
 
-    @PostMapping("/RequestReturn")
+    @PutMapping("/RequestReturn")
     public ApiResponse<BookLoanResponse> requestReturn(@RequestBody BookLoanRequestReturnRequest request) {
         return ApiResponse.<BookLoanResponse>builder()
                 .result(bookLoanService.requestReturn(request))
                 .build();
     }
 
-    @PostMapping("/AcceptReturn")
+    @PutMapping("/AcceptReturn")
     public ApiResponse<BookLoanResponse> acceptReturn(@RequestBody BookLoanAcceptReturnRequest request) {
         return ApiResponse.<BookLoanResponse>builder()
                 .result(bookLoanService.acceptReturn(request))
                 .build();
     }
 
-    @PostMapping("/SetNonreturnable")
+    @PutMapping("/SetNonreturnable")
     public ApiResponse<BookLoanResponse> setBookLoanNonreturnable(@RequestBody BookLoanSetNonreturnableRequest request) {
         return ApiResponse.<BookLoanResponse>builder()
                 .result(bookLoanService.setBookLoanNonreturnable(request))
                 .build();
     }
 
-    @PostMapping("/RejectBorrow")
+    @PutMapping("/RejectBorrow")
     public ResponseEntity<BookLoanResponse> rejectBorrow(@RequestBody BookLoanRejectBorrowRequest request) {
         BookLoanResponse response = bookLoanService.rejectBorrow(request);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/RejectReturn")
+    @PutMapping("/RejectReturn")
     public ResponseEntity<BookLoanResponse> rejectReturn(@RequestBody BookLoanRejectReturnRequest request) {
         BookLoanResponse response = bookLoanService.rejectReturn(request);
         return ResponseEntity.ok(response);
