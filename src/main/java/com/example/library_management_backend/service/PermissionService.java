@@ -3,6 +3,7 @@ package com.example.library_management_backend.service;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.permission.request.PermissionGetAllRequest;
 import com.example.library_management_backend.dto.permission.request.PermissionRequest;
+import com.example.library_management_backend.dto.permission.request.PermissionUpdateRequest;
 import com.example.library_management_backend.dto.permission.response.PermissionResponse;
 import com.example.library_management_backend.entity.Permission;
 import com.example.library_management_backend.exception.AppException;
@@ -56,7 +57,7 @@ public class PermissionService {
         return permissionMapper.toPermissionResponse(permission);
     }
 
-    public PermissionResponse updatePermission(PermissionRequest request) {
+    public PermissionResponse updatePermission(PermissionUpdateRequest request) {
         Permission permission = permissionRepository.findById(String.valueOf(request.getId())).orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
         permissionMapper.updatePermission(permission, request);
         permission = permissionRepository.save(permission);

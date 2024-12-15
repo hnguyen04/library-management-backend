@@ -4,6 +4,7 @@ package com.example.library_management_backend.service;
 import com.example.library_management_backend.constants.RoleEnum;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.role.request.RoleRequest;
+import com.example.library_management_backend.dto.role.request.RoleUpdateRequest;
 import com.example.library_management_backend.dto.role.response.RoleResponse;
 import com.example.library_management_backend.entity.Permission;
 import com.example.library_management_backend.entity.Role;
@@ -73,7 +74,7 @@ public class RoleService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public RoleResponse updateRole(RoleRequest request) {
+    public RoleResponse updateRole(RoleUpdateRequest request) {
         Role role = roleRepository.findById(String.valueOf(request.getId())).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         roleMapper.updateRole(role, request);
         var permissions = permissionRepository.findAllById(

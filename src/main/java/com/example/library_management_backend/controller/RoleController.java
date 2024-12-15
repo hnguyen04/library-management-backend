@@ -3,6 +3,7 @@ package com.example.library_management_backend.controller;
 import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.role.request.RoleRequest;
+import com.example.library_management_backend.dto.role.request.RoleUpdateRequest;
 import com.example.library_management_backend.dto.role.response.RoleResponse;
 import com.example.library_management_backend.service.RoleService;
 import lombok.AccessLevel;
@@ -43,7 +44,7 @@ public class RoleController {
     }
 
     @PutMapping("/Update")
-    ApiResponse<RoleResponse> updateRole(@RequestBody RoleRequest request) {
+    ApiResponse<RoleResponse> updateRole(@RequestBody RoleUpdateRequest request) {
         return ApiResponse.<RoleResponse>builder().
                 result(roleService.updateRole(request)).
                 build();

@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = false)
-public class PermissionRequest {
+public class PermissionUpdateRequest {
+    int id;
     String name;
 }
