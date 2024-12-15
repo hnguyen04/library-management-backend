@@ -110,4 +110,16 @@ public class BookLoanController {
                 .result(bookLoanService.setBookLoanNonreturnable(request))
                 .build();
     }
+
+    @PostMapping("/RejectBorrow")
+    public ResponseEntity<BookLoanResponse> rejectBorrow(@RequestBody BookLoanRejectBorrowRequest request) {
+        BookLoanResponse response = bookLoanService.rejectBorrow(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/RejectReturn")
+    public ResponseEntity<BookLoanResponse> rejectReturn(@RequestBody BookLoanRejectReturnRequest request) {
+        BookLoanResponse response = bookLoanService.rejectReturn(request);
+        return ResponseEntity.ok(response);
+    }
 }

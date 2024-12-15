@@ -1,6 +1,7 @@
 package com.example.library_management_backend.entity;
 
 import com.example.library_management_backend.constants.BookLoanStatusEnum;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -41,6 +42,9 @@ public class BookLoan {
 
     @Enumerated(EnumType.STRING)
     BookLoanStatusEnum status;
+
+    @Column(nullable = true)
+    String currentBookRequestId;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
