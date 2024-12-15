@@ -13,6 +13,7 @@ import java.util.Date;
 public class FineResponse {
     String id;
     String userId;
+    String userName;
     String bookLoanId;
     String bookTitle;
     double amount;

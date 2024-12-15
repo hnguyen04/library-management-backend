@@ -16,7 +16,6 @@ public class BookLoanUpdateRequest {
     @NotNull(message = "Book Loan ID is required")
     String id;
     String bookCopyId;
-    String userId;
     Date loanDate;
     Date returnDate;
     Date actualReturnDate;

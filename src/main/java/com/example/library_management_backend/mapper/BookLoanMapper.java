@@ -20,6 +20,7 @@ public interface BookLoanMapper {
     @Mapping(source = "bookCopy.book.title", target = "bookTitle")
     @Mapping(source = "bookCopy.id", target = "bookCopyId")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.name", target = "userName")
     @Mapping(source = "loanDate", target = "loanDate")
     @Mapping(source = "returnDate", target = "returnDate")
     @Mapping(source = "actualReturnDate", target = "actualReturnDate")

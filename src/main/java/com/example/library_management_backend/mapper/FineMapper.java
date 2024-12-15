@@ -18,6 +18,7 @@ public interface FineMapper {
     void updateFine(@MappingTarget Fine fine, FineUpdateRequest request);
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.name", target = "userName")
     @Mapping(source = "bookLoan.id", target = "bookLoanId")
     @Mapping(source = "bookLoan.bookCopy.book.title", target = "bookTitle")
     FineResponse toFineResponse(Fine fine);

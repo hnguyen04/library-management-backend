@@ -4,10 +4,7 @@ import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.constants.BookLoanStatusEnum;
 import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanCreationRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanGetAllRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanRequestBorrowRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanUpdateRequest;
+import com.example.library_management_backend.dto.book_loan.request.*;
 import com.example.library_management_backend.dto.book_loan.response.BookLoanResponse;
 import com.example.library_management_backend.entity.BookCopy;
 import com.example.library_management_backend.service.BookLoanService;
@@ -79,9 +76,23 @@ public class BookLoanController {
                 .build();
     }
 
-    @PostMapping("/request-borrow")
+    @PostMapping("/RequestBorrow")
     public ResponseEntity<BookLoanResponse> requestBorrow(@Valid @RequestBody BookLoanRequestBorrowRequest request) {
         BookLoanResponse response = bookLoanService.requestBorrow(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/SetBorrowed")
+    public ApiResponse<BookLoanResponse> setBookLoanBorrowed(@RequestBody BookLoanSetBorrowedRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.setBookLoanBorrowed(request))
+                .build();
+    }
+
+    @PostMapping("/RequestReturn")
+    public ApiResponse<BookLoanResponse> requestReturn(@RequestBody BookLoanRequestReturnRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.requestReturn(request))
+                .build();
     }
 }

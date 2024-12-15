@@ -3,10 +3,7 @@ package com.example.library_management_backend.service;
 import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.constants.BookLoanStatusEnum;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanCreationRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanGetAllRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanRequestBorrowRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanUpdateRequest;
+import com.example.library_management_backend.dto.book_loan.request.*;
 import com.example.library_management_backend.dto.book_loan.response.BookLoanResponse;
 import com.example.library_management_backend.entity.BookCopy;
 import com.example.library_management_backend.entity.BookLoan;
@@ -141,6 +138,34 @@ public class BookLoanService {
                 .build();
 
         bookLoan = bookLoanRepository.save(bookLoan);
+        return bookLoanMapper.toBookLoanResponse(bookLoan);
+    }
+
+    public BookLoanResponse setBookLoanBorrowed(BookLoanSetBorrowedRequest request) {
+        BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
+
+        bookLoan.setStatus(BookLoanStatusEnum.BORROWED);
+        bookLoan = bookLoanRepository.save(bookLoan);
+
+        return bookLoanMapper.toBookLoanResponse(bookLoan);
+    }
+
+    public BookLoanResponse requestReturn(BookLoanRequestReturnRequest request) {
+        BookLoan bookLoan = bookLoanRepository.findById(request.getBookLoanId())
+                .orElseThrow(() -> new AppException(ErrorCode.BOOK_LOAN_NOT_EXISTED));
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!bookLoan.getUser().getId().equals(request.getUserId())) {
+            throw new AppException(ErrorCode.USER_NOT_AUTHORIZED);
+        }
+
+        bookLoan.setStatus(BookLoanStatusEnum.REQUEST_RETURNING);
+        bookLoan.setActualReturnDate(new Date());
+        bookLoan = bookLoanRepository.save(bookLoan);
+
         return bookLoanMapper.toBookLoanResponse(bookLoan);
     }
 }
