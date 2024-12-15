@@ -15,9 +15,11 @@ public class BookLoanResponse {
     String id;
     String bookCopyId;
     String userId;
+    String userName;
     Date loanDate;
     Date returnDate;
     Date actualReturnDate;
     BookLoanStatusEnum status;
     String bookTitle;
+    String bookRequestId;
 }

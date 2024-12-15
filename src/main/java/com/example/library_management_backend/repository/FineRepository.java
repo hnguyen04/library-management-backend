@@ -11,13 +11,13 @@ import java.util.List;
 public interface FineRepository extends JpaRepository<Fine, String> {
     @Query("SELECT f FROM Fine f " +
             "JOIN f.bookLoan bl " +
-            "WHERE (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%) " +
+            "WHERE (:userId IS NULL OR bl.user.id = :userId) " +
             "ORDER BY f.CreatedAt DESC")
-    List<Fine> findAllFinesByFilters(@Param("bookTitle") String bookTitle);
+    List<Fine> findAllFinesByFilters(@Param("userId") String userId);
 
     @Query("SELECT COUNT(f) " +
             "FROM Fine f " +
             "JOIN f.bookLoan bl " +
-            "WHERE (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%)")
-    long countByFilters(@Param("bookTitle") String bookTitle);
+            "WHERE (:userId IS NULL OR bl.user.id = :userId)")
+    long countByFilters(@Param("userId") String userId);
 }

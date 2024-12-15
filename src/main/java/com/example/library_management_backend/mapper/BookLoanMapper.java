@@ -14,15 +14,16 @@ public interface BookLoanMapper {
     @Mapping(target = "status", source = "status")
     BookLoan toBookLoan(BookLoanCreationRequest request);
 
-    @Mapping(target = "status", source = "status")
     void updateBookLoan(@MappingTarget BookLoan bookLoan, BookLoanUpdateRequest request);
 
     @Mapping(source = "bookCopy.book.title", target = "bookTitle")
     @Mapping(source = "bookCopy.id", target = "bookCopyId")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.name", target = "userName")
     @Mapping(source = "loanDate", target = "loanDate")
     @Mapping(source = "returnDate", target = "returnDate")
     @Mapping(source = "actualReturnDate", target = "actualReturnDate")
     @Mapping(source = "status", target = "status")
+    @Mapping(source = "currentBookRequestId", target = "bookRequestId")
     BookLoanResponse toBookLoanResponse(BookLoan bookLoan);
 }

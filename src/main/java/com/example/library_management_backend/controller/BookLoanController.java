@@ -4,10 +4,7 @@ import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.constants.BookLoanStatusEnum;
 import com.example.library_management_backend.dto.base.response.ApiResponse;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanCreationRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanGetAllRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanRequestBorrowRequest;
-import com.example.library_management_backend.dto.book_loan.request.BookLoanUpdateRequest;
+import com.example.library_management_backend.dto.book_loan.request.*;
 import com.example.library_management_backend.dto.book_loan.response.BookLoanResponse;
 import com.example.library_management_backend.entity.BookCopy;
 import com.example.library_management_backend.service.BookLoanService;
@@ -40,12 +37,14 @@ public class BookLoanController {
     public ApiResponse<BaseGetAllResponse<BookLoanResponse>> getAllBookLoans(
             @RequestParam(value = "bookTitle", required = false) String bookTitle,
             @RequestParam(value = "status", required = false) BookLoanStatusEnum status,
+            @RequestParam(value = "userId", required = false) String userId,
             @RequestParam(value = "skipCount", defaultValue = "0") int skipCount,
             @RequestParam(value = "maxResultCount", defaultValue = "10") int maxResultCount) {
 
         BookLoanGetAllRequest request = BookLoanGetAllRequest.builder()
                 .bookTitle(bookTitle)
                 .status(status)
+                .userId(userId)
                 .skipCount(skipCount)
                 .maxResultCount(maxResultCount)
                 .build();
@@ -77,9 +76,50 @@ public class BookLoanController {
                 .build();
     }
 
-    @PostMapping("/request-borrow")
-    public ResponseEntity<BookLoanResponse> requestBorrow(@Valid @RequestBody BookLoanRequestBorrowRequest request) {
-        BookLoanResponse response = bookLoanService.requestBorrow(request);
+    @PostMapping("/RequestBorrow")
+    public ApiResponse<BookLoanResponse> requestBorrow(@Valid @RequestBody BookLoanRequestBorrowRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.requestBorrow(request))
+                .build();
+    }
+
+    @PutMapping("/SetBorrowed")
+    public ApiResponse<BookLoanResponse> setBookLoanBorrowed(@RequestBody BookLoanSetBorrowedRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.setBookLoanBorrowed(request))
+                .build();
+    }
+
+    @PutMapping("/RequestReturn")
+    public ApiResponse<BookLoanResponse> requestReturn(@RequestBody BookLoanRequestReturnRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.requestReturn(request))
+                .build();
+    }
+
+    @PutMapping("/AcceptReturn")
+    public ApiResponse<BookLoanResponse> acceptReturn(@RequestBody BookLoanAcceptReturnRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.acceptReturn(request))
+                .build();
+    }
+
+    @PutMapping("/SetNonreturnable")
+    public ApiResponse<BookLoanResponse> setBookLoanNonreturnable(@RequestBody BookLoanSetNonreturnableRequest request) {
+        return ApiResponse.<BookLoanResponse>builder()
+                .result(bookLoanService.setBookLoanNonreturnable(request))
+                .build();
+    }
+
+    @PutMapping("/RejectBorrow")
+    public ResponseEntity<BookLoanResponse> rejectBorrow(@RequestBody BookLoanRejectBorrowRequest request) {
+        BookLoanResponse response = bookLoanService.rejectBorrow(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/RejectReturn")
+    public ResponseEntity<BookLoanResponse> rejectReturn(@RequestBody BookLoanRejectReturnRequest request) {
+        BookLoanResponse response = bookLoanService.rejectReturn(request);
         return ResponseEntity.ok(response);
     }
 }

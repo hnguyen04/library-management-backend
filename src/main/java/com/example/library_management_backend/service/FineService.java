@@ -34,15 +34,16 @@ public class FineService {
     public BaseGetAllResponse<FineResponse> getAllFines(FineGetAllRequest request) {
         int skipCount = request.getSkipCount() != null ? request.getSkipCount() : 0;
         int maxResultCount = request.getMaxResultCount() != null ? request.getMaxResultCount() : 10;
+        String userId = (request.getUserId() == null || request.getUserId().isEmpty()) ? null : request.getUserId();
 
-        List<FineResponse> fineResponseList = fineRepository.findAllFinesByFilters(null)
+        List<FineResponse> fineResponseList = fineRepository.findAllFinesByFilters(userId)
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
                 .map(fineMapper::toFineResponse)
                 .collect(Collectors.toList());
 
-        long totalRecords = fineRepository.countByFilters(null);
+        long totalRecords = fineRepository.countByFilters(userId);
 
         return BaseGetAllResponse.<FineResponse>builder()
                 .data(fineResponseList)

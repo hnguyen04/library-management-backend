@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class BookLoanGetAllRequest {
     String bookTitle;
     BookLoanStatusEnum status;
+    String userId;
     Integer skipCount;
     Integer maxResultCount;
 }

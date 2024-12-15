@@ -40,6 +40,7 @@ public enum ErrorCode {
     BOOK_REQUEST_STATUS_NOT_EXISTED(1028,"BookRequestStatus not existed" , HttpStatus.NOT_FOUND),
     BOOK_REQUEST_TYPE_NOT_EXISTED(1029,"BookRequestType not existed" , HttpStatus.NOT_FOUND),
     BOOK_REQUEST_EXISTED(1030,"BookRequest existed" , HttpStatus.BAD_REQUEST),
+    USER_NOT_AUTHORIZED(1031, "User not authorized", HttpStatus.BAD_REQUEST),
     WRONG_PASSWORD(1100,"Wrong password" , HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
