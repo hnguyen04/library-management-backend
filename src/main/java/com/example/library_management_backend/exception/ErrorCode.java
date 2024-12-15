@@ -36,6 +36,10 @@ public enum ErrorCode {
     INVALID_BOOK_LOAN_STATUS(1024, "Invalid book loan status", HttpStatus.BAD_REQUEST),
     INVALID_NUMBER_OF_DAYS_LOAN(1025, "Invalid number of days loan", HttpStatus.BAD_REQUEST),
     BOOK_COPY_NOT_AVAILABLE(1026, "Book copy not available", HttpStatus.BAD_REQUEST),
+    BOOK_REQUEST_NOT_EXISTED(1027,"BookRequest not existed" , HttpStatus.NOT_FOUND),
+    BOOK_REQUEST_STATUS_NOT_EXISTED(1028,"BookRequestStatus not existed" , HttpStatus.NOT_FOUND),
+    BOOK_REQUEST_TYPE_NOT_EXISTED(1029,"BookRequestType not existed" , HttpStatus.NOT_FOUND),
+    BOOK_REQUEST_EXISTED(1030,"BookRequest existed" , HttpStatus.BAD_REQUEST),
     WRONG_PASSWORD(1100,"Wrong password" , HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
