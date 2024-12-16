@@ -12,7 +12,7 @@ public interface FineRepository extends JpaRepository<Fine, String> {
     @Query("SELECT f FROM Fine f " +
             "JOIN f.bookLoan bl " +
             "WHERE (:userId IS NULL OR bl.user.id = :userId) " +
-            "ORDER BY f.CreatedAt DESC")
+            "ORDER BY f.UpdatedAt DESC")
     List<Fine> findAllFinesByFilters(@Param("userId") String userId);
 
     @Query("SELECT COUNT(f) " +

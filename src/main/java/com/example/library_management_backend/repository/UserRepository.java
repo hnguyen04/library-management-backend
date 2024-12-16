@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, String> {
             "WHERE (:name IS NULL OR u.name = :name) " +
             "AND (:email IS NULL OR u.email = :email) " +
             "AND (:roleId IS NULL OR r.id = :roleId) " +
-            "ORDER BY u.CreatedAt DESC")
+            "ORDER BY u.UpdatedAt DESC")
     List<UserResponse> findAllByFilters(@Param("name") String name,
                                         @Param("email") String email,
                                         @Param("roleId") Integer roleId);

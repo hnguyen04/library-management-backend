@@ -14,7 +14,8 @@ import java.util.Optional;
 public interface BookCopyRepository extends JpaRepository<BookCopy, String> {
     @Query("SELECT bc FROM BookCopy bc WHERE (:bookId IS NULL OR bc.book.id = :bookId) " +
             "AND (:bookTitle IS NULL OR bc.book.title LIKE %:bookTitle%) " +
-            "AND (:status IS NULL OR bc.status = :status)")
+            "AND (:status IS NULL OR bc.status = :status) " +
+            "ORDER BY bc.updatedAt DESC")
     List<BookCopy> findAllByFilters(@Param("bookId") String bookId,
                                     @Param("bookTitle") String bookTitle,
                                     @Param("status") BookCopyStatusEnum status);
