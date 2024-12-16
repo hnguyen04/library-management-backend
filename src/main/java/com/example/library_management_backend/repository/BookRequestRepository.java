@@ -18,7 +18,8 @@ public interface BookRequestRepository extends JpaRepository<BookRequest, String
             "AND (:type IS NULL OR br.type = :type) " +
             "AND (:userId IS NULL OR br.bookLoan.user.id = :userId) " +
             "AND (:userName IS NULL OR br.bookLoan.user.name LIKE %:userName%) " +
-            "AND (:status IS NULL OR br.status = :status)")
+            "AND (:status IS NULL OR br.status = :status) " +
+            "ORDER BY br.UpdatedAt DESC")
     List<BookRequest> findAllByFilters(@Param("bookTitle") String bookTitle,
                                        @Param("status") BookRequestStatusEnum status,
                                        @Param("userId") String userId,

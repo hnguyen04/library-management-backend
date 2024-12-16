@@ -13,7 +13,8 @@ import java.util.List;
 public interface BookLoanRepository extends JpaRepository<BookLoan, String> {
     @Query("SELECT bl FROM BookLoan bl WHERE (:userId IS NULL OR bl.user.id = :userId) " +
             "AND (:bookTitle IS NULL OR bl.bookCopy.book.title LIKE %:bookTitle%) " +
-            "AND (:status IS NULL OR bl.status = :status)")
+            "AND (:status IS NULL OR bl.status = :status) " +
+            "ORDER BY bl.UpdatedAt DESC")
     List<BookLoan> findAllByFilters(@Param("userId") String userId,
                                     @Param("bookTitle") String bookTitle,
                                     @Param("status") BookLoanStatusEnum status);
