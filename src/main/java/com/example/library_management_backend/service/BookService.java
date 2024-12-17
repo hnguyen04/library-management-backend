@@ -1,5 +1,6 @@
 package com.example.library_management_backend.service;
 
+import com.example.library_management_backend.constants.BookCopyStatusEnum;
 import com.example.library_management_backend.dto.base.response.BaseGetAllResponse;
 import com.example.library_management_backend.dto.book.request.BookCreationRequest;
 import com.example.library_management_backend.dto.book.request.BookGetAllRequest;
@@ -12,10 +13,7 @@ import com.example.library_management_backend.exception.AppException;
 import com.example.library_management_backend.exception.ErrorCode;
 import com.example.library_management_backend.mapper.BookMapper;
 import com.example.library_management_backend.mapper.PublisherMapper;
-import com.example.library_management_backend.repository.AuthorRepository;
-import com.example.library_management_backend.repository.BookRepository;
-import com.example.library_management_backend.repository.CategoryRepository;
-import com.example.library_management_backend.repository.PublisherRepository;
+import com.example.library_management_backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +34,7 @@ public class BookService {
     PublisherRepository publisherRepository;
     BookRepository bookRepository;
     BookMapper bookMapper;
-    private final PublisherMapper publisherMapper;
+    BookCopyRepository bookCopyRepository;
 
     public BookResponse createBook(BookCreationRequest request) {
         Book book = bookMapper.toBook(request);
@@ -80,7 +78,12 @@ public class BookService {
                 .stream()
                 .skip(skipCount)
                 .limit(maxResultCount)
-                .map(bookMapper::toBookResponse)
+                .map(book -> {
+                    BookResponse bookResponse = bookMapper.toBookResponse(book);
+                    long availableCopies = bookCopyRepository.countByFilters(String.valueOf(book.getId()), null, BookCopyStatusEnum.AVAILABLE);
+                    bookResponse.setNumberOfCopiesAvailable(availableCopies);
+                    return bookResponse;
+                })
                 .collect(Collectors.toList());
 
         return BaseGetAllResponse.<BookResponse>builder()

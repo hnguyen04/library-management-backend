@@ -19,6 +19,7 @@ public class BookResponse {
     double price;
     String description;
     int publisherId;
+    long numberOfCopiesAvailable;
     String publisherName;
     Set<Author> authors;
     Set<Category> categories;
