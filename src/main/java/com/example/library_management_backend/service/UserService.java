@@ -37,7 +37,7 @@ public class UserService {
     private final UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse createUser(UserCreationRequest request) {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -53,7 +53,7 @@ public class UserService {
         return userResponse;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Role.GetAll')")
     public BaseGetAllResponse<UserResponse> getAllUsers(UserGetAllRequest request) {
         log.info("in getAllUsers function");
 

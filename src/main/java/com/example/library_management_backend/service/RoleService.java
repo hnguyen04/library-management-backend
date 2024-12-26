@@ -53,7 +53,7 @@ public class RoleService {
         return roleMapper.toRoleResponse(role);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('Role.GetAll')")
     public BaseGetAllResponse<RoleResponse> getAllRole() {
         List<RoleResponse> roleList =  roleRepository.findAll()
                 .stream()
